@@ -9,6 +9,12 @@ export const TABS = [
   { to: '/rights', label: 'Rights', icon: Timer },
 ] as const;
 
+/** The tab a path belongs to, for back-button labels ("Home", "Collabs", …). */
+export function tabLabelFor(pathname: string): string | undefined {
+  const i = activeIndex(pathname);
+  return i >= 0 ? TABS[i]?.label : undefined;
+}
+
 function activeIndex(pathname: string): number {
   return TABS.findIndex((t) => (t.to === '/' ? pathname === '/' : pathname.startsWith(t.to)));
 }

@@ -40,6 +40,13 @@ import styles from './Detail.module.css';
 
 type Field = [label: string, value: string | null | undefined];
 
+const TAB_PATHS: Record<string, string> = {
+  Home: '/',
+  Collabs: '/collabs',
+  Payments: '/payments',
+  Rights: '/rights',
+};
+
 export function CollabDetail() {
   const { id = '' } = useParams();
   const location = useLocation();
@@ -68,7 +75,10 @@ export function CollabDetail() {
     if (collab) document.title = `${collab.brand} · Creator OS`;
   }, [collab]);
 
-  const goBack = () => (from && window.history.length > 1 ? navigate(-1) : navigate('/collabs'));
+  // Step back through history when we arrived from inside the app; otherwise (deep link,
+  // fresh launch) go to the named tab so Back never leaves the app.
+  const canStepBack = !!from && ((window.history.state as { idx?: number } | null)?.idx ?? 0) > 0;
+  const goBack = () => (canStepBack ? navigate(-1) : navigate(TAB_PATHS[backLabel] ?? '/collabs'));
 
   const invoices = useMemo(
     () => [...invoicesOf(index, id)].sort((a, b) => b.issuedOn.localeCompare(a.issuedOn)),

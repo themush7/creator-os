@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { tabLabelFor } from '@/app/TabBar';
 import type { SheetProps } from '@/app/sheets';
 import { useAction } from '@/app/useAction';
 import { Button } from '@/components/Button';
@@ -15,6 +16,7 @@ import styles from './sheet.module.css';
 export function QuickAddSheet({ open, onClose, returnFocus }: SheetProps<{ type: 'add' }>) {
   const run = useAction();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [form, setForm] = useState({
     brand: '',
     campaign: '',
@@ -42,7 +44,7 @@ export function QuickAddSheet({ open, onClose, returnFocus }: SheetProps<{ type:
     setSaving(false);
     if (c) {
       onClose();
-      navigate(`/collabs/${c.id}`, { state: { from: 'Collabs' } });
+      navigate(`/collabs/${c.id}`, { state: { from: tabLabelFor(pathname) ?? 'Collabs' } });
     }
   }
 
