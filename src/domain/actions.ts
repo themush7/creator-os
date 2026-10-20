@@ -84,10 +84,11 @@ function allTables(db: CreatorDb) {
   return [db.collabs, db.invoices, db.rights, db.activity, db.settings];
 }
 
+/** Marks the Sheet mirror as behind. Always stamps `changedAt`, so an in-flight push can tell. */
 async function flagDirty(db: CreatorDb, rec?: Recorder) {
   const s = await db.settings.get('app');
-  if (!s || s.sheetSync.dirty) return;
-  const next = { ...s, sheetSync: { ...s.sheetSync, dirty: true } };
+  if (!s) return;
+  const next = { ...s, sheetSync: { ...s.sheetSync, dirty: true, changedAt: nowIso() } };
   if (rec) await rec.put('settings', next);
   else await db.settings.put(next);
 }

@@ -98,6 +98,8 @@ export interface SheetSyncSettings {
   lastError: string | null;
   /** True when local data changed after the last successful push. */
   dirty: boolean;
+  /** Stamped by every change. A push only clears `dirty` if this has not moved since it started. */
+  changedAt?: IsoTimestamp | null;
 }
 
 export interface Settings {

@@ -92,6 +92,7 @@ export const sheetSyncSchema: z.ZodType<SheetSyncSettings> = z.object({
   lastSyncedAt: isoTs.nullable(),
   lastError: z.string().nullable(),
   dirty: z.boolean(),
+  changedAt: isoTs.nullable().optional(),
 });
 
 export const settingsSchema: z.ZodType<Settings> = z.object({

@@ -31,7 +31,7 @@ import {
   type AttentionRule,
 } from '@/domain/attention';
 import { compareByNextDue } from '@/domain/lists';
-import { isActiveCollab } from '@/domain/status';
+import { BACKUP_STALE_DAYS, isActiveCollab } from '@/domain/status';
 import { diffDays, formatLong, formatShort, monthKey, monthLong, monthShort } from '@/lib/dates';
 import { inr, sum } from '@/lib/money';
 import { CollabCard } from '../shared/CollabCard';
@@ -45,8 +45,6 @@ const RULE_TILE: Record<AttentionRule, { icon: LucideIcon; color: string }> = {
   you: { icon: UserRound, color: TILE_COLOR.tint },
   brand: { icon: Store, color: TILE_COLOR.gray },
 };
-
-export const BACKUP_STALE_DAYS = 7;
 
 function greeting(now = new Date()): string {
   const h = now.getHours();
@@ -235,7 +233,7 @@ export function Home() {
           <span style={{ flex: 1 }}>
             Saved on this device ·{' '}
             {settings.lastBackupOn
-              ? `last backup ${formatShort(settings.lastBackupOn)}`
+              ? `last backup ${formatShort(settings.lastBackupOn)}${backupStale ? ` · ${backupAge} days ago` : ''}`
               : 'never backed up'}
           </span>
           <span className={styles.backupLink}>Back up</span>

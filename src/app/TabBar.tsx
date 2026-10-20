@@ -10,8 +10,7 @@ export const TABS = [
 ] as const;
 
 function activeIndex(pathname: string): number {
-  const i = TABS.findIndex((t) => (t.to === '/' ? pathname === '/' : pathname.startsWith(t.to)));
-  return i < 0 ? 0 : i;
+  return TABS.findIndex((t) => (t.to === '/' ? pathname === '/' : pathname.startsWith(t.to)));
 }
 
 export function TabBar({ onAdd }: { onAdd: () => void }) {
@@ -21,11 +20,13 @@ export function TabBar({ onAdd }: { onAdd: () => void }) {
     <div className={styles.dock}>
       <nav className={styles.tabbar} aria-label="Main">
         <ul className={styles.list}>
-          <li
-            className={styles.lens}
-            style={{ transform: `translateX(${index * 100}%)` }}
-            aria-hidden
-          />
+          {index >= 0 && (
+            <li
+              className={styles.lens}
+              style={{ transform: `translateX(${index * 100}%)` }}
+              aria-hidden
+            />
+          )}
           {TABS.map(({ to, label, icon: Icon }) => (
             <li key={to} className={styles.item}>
               <NavLink

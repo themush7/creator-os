@@ -6,6 +6,9 @@ import { App } from './app/App';
 import { TodayProvider, readTodayOverride } from './app/today';
 import { ToastProvider } from './components/Toast';
 import { DataProvider } from './app/data';
+import { listenForInstallPrompt } from './lib/install';
+
+listenForInstallPrompt();
 
 // iOS Safari only applies :active (the press scale) when a touch listener exists.
 document.addEventListener('touchstart', () => {}, { passive: true });

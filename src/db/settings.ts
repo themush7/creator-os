@@ -22,6 +22,7 @@ export function defaultSettings(year: number): Settings {
       lastSyncedAt: null,
       lastError: null,
       dirty: false,
+      changedAt: null,
     },
     updatedAt: nowIso(),
   };

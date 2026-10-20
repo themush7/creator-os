@@ -139,6 +139,9 @@ export function extensionStartOn(p: RightsPeriod, today: DateStr): DateStr {
   return diffDays(today, end) >= 0 ? addDays(end, 1) : today;
 }
 
+/** A backup older than this many days nudges on Home and shows orange in Settings. */
+export const BACKUP_STALE_DAYS = 7;
+
 // ─── Collabs ─────────────────────────────────────────────────────────────────
 
 export function isActiveCollab(c: Collab): boolean {
