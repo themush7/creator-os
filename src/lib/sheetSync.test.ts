@@ -109,6 +109,18 @@ describe('runSync', () => {
     expect(push.mock.calls[0]![1].key).toBe(key);
   });
 
+  it('rejects a Sheet link pasted as the web app URL, without calling out', async () => {
+    const s = (await db.settings.get('app'))!;
+    await db.settings.put({
+      ...s,
+      sheetSync: { ...s.sheetSync, url: 'https://docs.google.com/spreadsheets/d/abc/edit' },
+    });
+    const push = vi.fn();
+    expect(await runSync(db, SEED_TODAY, push, { manual: true })).toBe('failed');
+    expect(push).not.toHaveBeenCalled();
+    expect((await db.settings.get('app'))!.sheetSync.lastError).toMatch(/That is the Sheet link/);
+  });
+
   it('manual export needs a URL', async () => {
     const s = (await db.settings.get('app'))!;
     await db.settings.put({ ...s, sheetSync: { ...s.sheetSync, url: '' } });

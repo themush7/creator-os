@@ -247,6 +247,13 @@ export async function runSync(
   let s = settings.sheetSync;
   if (!s.url) return 'skipped';
   if (!options.manual && (!s.enabled || !s.dirty || !s.key)) return 'skipped';
+  if (!isAppsScriptUrl(s.url)) {
+    const msg = /docs\.google\.com\/spreadsheets/.test(s.url)
+      ? 'That is the Sheet link. Paste the Web app URL from Deploy → Manage deployments instead (it ends in /exec).'
+      : 'The Web app URL should start with https://script.google.com/macros/s/ and end in /exec.';
+    await patchSync(db, { lastError: msg });
+    return 'failed';
+  }
   if (!s.key) {
     s = { ...s, key: generateKey() };
     await patchSync(db, { key: s.key });
