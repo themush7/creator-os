@@ -1,0 +1,100 @@
+/*
+ * Gradient design system tokens for Creator OS.
+ * One accent (copper). No semantic green/amber/red: status is carried by labelled pills.
+ * Type sizes are rem against a 17px root so iOS Dynamic Type scales everything.
+ */
+:root {
+  /* Colour */
+  --copper: #a66a45;
+  --copper-focus: #c1845c;
+  --copper-soft: #d6a98a; /* on espresso only, never on white */
+  --espresso: #241a16;
+  --espresso-2: #2e241f;
+  --espresso-line: #3a2e28;
+  --void: #111217;
+  --white: #ffffff;
+  --parchment: #f4f4f8;
+  --pearl: #fafafc;
+  --ink: #1f2026;
+  --ink-80: #343641;
+  --ink-48: #777a86;
+  --hairline: #d9dae2;
+  --divider-soft: #ececf1;
+  --on-dark-muted: #c7c9d1;
+
+  --frosted: rgba(244, 244, 248, 0.8);
+  --frosted-filter: saturate(180%) blur(20px);
+  --scrim: rgba(17, 18, 23, 0.42);
+  --hero-mesh:
+    radial-gradient(110% 86% at 12% 0%, rgba(214, 169, 138, 0.1) 0%, rgba(214, 169, 138, 0) 58%),
+    radial-gradient(96% 78% at 88% 102%, rgba(166, 106, 69, 0.13) 0%, rgba(166, 106, 69, 0) 62%),
+    #241a16;
+
+  /* Type */
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-screen: 1.6471rem; /* 28 */
+  --fs-figure: 1.4118rem; /* 24 */
+  --fs-sheet: 1.2353rem; /* 21 */
+  --fs-section: 1.1176rem; /* 19 */
+  --fs-body: 1rem; /* 17 */
+  --fs-row: 0.9412rem; /* 16 */
+  --fs-15: 0.8824rem; /* 15 */
+  --fs-caption: 0.8235rem; /* 14 */
+  --fs-meta: 0.7647rem; /* 13 */
+  --fs-fine: 0.7059rem; /* 12 */
+
+  --lh-body: 1.47;
+  --lh-title: 1.14;
+  --track-title: -0.374px;
+  --track-caption: -0.224px;
+  --track-meta: -0.12px;
+
+  --w-light: 300;
+  --w-regular: 400;
+  --w-semibold: 600;
+  --w-bold: 700;
+
+  /* Space */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --gutter: 16px;
+
+  /* Shape */
+  --r-sm: 8px;
+  --r-input: 11px;
+  --r-card: 18px;
+  --r-pill: 999px;
+
+  /* Chrome */
+  --tap: 44px;
+  --tabbar-h: 84px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Motion */
+  --press-scale: 0.95;
+  --dur-press: 120ms;
+  --dur-fade: 240ms;
+  --dur-scrim: 300ms;
+  --dur-sheet: 420ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-sheet: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --focus-ring: 2px solid var(--copper-focus);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-press: 0ms;
+    --dur-fade: 0ms;
+    --dur-scrim: 0ms;
+    --dur-sheet: 0ms;
+    --press-scale: 1;
+  }
+}

@@ -1,0 +1,21 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.fine {
+  font-size: var(--fs-fine);
+  color: var(--ink-48);
+  text-align: center;
+  letter-spacing: var(--track-meta);
+}
+
+.note {
+  font-size: var(--fs-caption);
+  color: var(--ink-80);
+  background: var(--parchment);
+  border-radius: var(--r-input);
+  padding: var(--s-3) 14px;
+  letter-spacing: var(--track-caption);
+}

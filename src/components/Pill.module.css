@@ -1,0 +1,39 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  padding: 2px 9px;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  font-size: var(--fs-fine);
+  font-weight: var(--w-semibold);
+  line-height: 1.2;
+  letter-spacing: var(--track-meta);
+  white-space: nowrap;
+  flex: none;
+}
+
+.attention {
+  background: var(--white);
+  color: var(--copper);
+  border-color: var(--copper);
+}
+
+.alert {
+  background: var(--espresso);
+  color: var(--white);
+  border-color: var(--espresso);
+}
+
+.neutral {
+  background: var(--parchment);
+  color: var(--ink-80);
+  border-color: var(--parchment);
+}
+
+.quiet {
+  background: var(--white);
+  color: var(--ink-48);
+  border-color: var(--hairline);
+}

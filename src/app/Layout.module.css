@@ -1,0 +1,16 @@
+.app {
+  min-height: 100dvh;
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+.main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding-bottom: calc(160px + var(--safe-bottom));
+  outline: none;
+}
+
+.detail {
+  padding-bottom: calc(110px + var(--safe-bottom));
+}

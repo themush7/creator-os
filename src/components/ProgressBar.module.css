@@ -1,0 +1,39 @@
+.track {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--divider-soft);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.copper {
+  background: var(--copper);
+}
+
+.espresso {
+  background: var(--espresso);
+}
+
+.hairline {
+  background: var(--hairline);
+}
+
+.segments {
+  display: flex;
+  gap: 3px;
+}
+
+.segment {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--hairline);
+}
+
+.reached {
+  background: var(--copper);
+}

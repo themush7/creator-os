@@ -1,0 +1,17 @@
+.card {
+  display: block;
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-card);
+  color: var(--ink);
+  text-align: left;
+}
+
+.padded {
+  padding: var(--s-4);
+}
+
+.flush {
+  overflow: hidden;
+}

@@ -1,0 +1,78 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: var(--tap);
+  padding: 11px 22px;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  font-size: var(--fs-body);
+  font-weight: var(--w-regular);
+  line-height: 1;
+  letter-spacing: var(--track-title);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.full {
+  display: flex;
+  width: 100%;
+}
+
+.large {
+  min-height: 48px;
+}
+
+.primary {
+  background: var(--copper);
+  color: var(--white);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--copper);
+  border-color: var(--copper);
+}
+
+.pearl {
+  min-height: 36px;
+  padding: 6px 14px;
+  gap: var(--s-1);
+  border: 3px solid var(--divider-soft);
+  border-radius: var(--r-input);
+  background: var(--pearl);
+  color: var(--ink-80);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--track-caption);
+  /* Keep a 44px hit area around the 36px capsule. */
+  position: relative;
+}
+
+.pearl::after {
+  content: '';
+  position: absolute;
+  inset: -6px -2px;
+}
+
+.link {
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--copper);
+  font-size: var(--fs-15);
+  letter-spacing: var(--track-caption);
+}
+
+.button:disabled {
+  background: var(--divider-soft);
+  color: var(--ink-48);
+  border-color: transparent;
+  cursor: default;
+}
+
+.secondary:disabled {
+  background: transparent;
+  border-color: var(--hairline);
+}
