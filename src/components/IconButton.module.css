@@ -6,31 +6,24 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--r-pill);
+  color: var(--label);
 }
 
-.light {
-  background: var(--white);
-  color: var(--ink);
+.glass {
+  composes: glass from global;
+}
+
+.fill {
+  background: var(--fill);
+  color: var(--label-2);
+}
+
+.tinted {
+  background: var(--tint-soft);
+  color: var(--tint);
 }
 
 .plain {
   background: transparent;
-  color: var(--ink);
-}
-
-.translucent {
-  background: rgba(210, 210, 215, 0.64);
-  color: var(--ink);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.dark {
-  background: var(--espresso-line);
-  color: var(--white);
-}
-
-.parchment {
-  background: var(--parchment);
-  color: var(--ink);
+  color: var(--tint);
 }

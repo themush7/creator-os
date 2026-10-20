@@ -1,100 +1,208 @@
 /*
- * Gradient design system tokens for Creator OS.
- * One accent (copper). No semantic green/amber/red: status is carried by labelled pills.
- * Type sizes are rem against a 17px root so iOS Dynamic Type scales everything.
+ * Creator OS design tokens: iOS 26 look, Apple palette.
+ * Tint #0066CC · label #1D1D1F · grouped background #F5F5F7 · white surfaces.
+ * Every colour has a dark-mode pair. Status colours are iOS system colours, always paired
+ * with an icon and a text label, never colour alone.
+ * Type sizes are rem against a 17px root (iOS body), so Dynamic Type scales everything.
  */
 :root {
-  /* Colour */
-  --copper: #a66a45;
-  --copper-focus: #c1845c;
-  --copper-soft: #d6a98a; /* on espresso only, never on white */
-  --espresso: #241a16;
-  --espresso-2: #2e241f;
-  --espresso-line: #3a2e28;
-  --void: #111217;
-  --white: #ffffff;
-  --parchment: #f4f4f8;
-  --pearl: #fafafc;
-  --ink: #1f2026;
-  --ink-80: #343641;
-  --ink-48: #777a86;
-  --hairline: #d9dae2;
-  --divider-soft: #ececf1;
-  --on-dark-muted: #c7c9d1;
+  color-scheme: light dark;
 
-  --frosted: rgba(244, 244, 248, 0.8);
-  --frosted-filter: saturate(180%) blur(20px);
-  --scrim: rgba(17, 18, 23, 0.42);
-  --hero-mesh:
-    radial-gradient(110% 86% at 12% 0%, rgba(214, 169, 138, 0.1) 0%, rgba(214, 169, 138, 0) 58%),
-    radial-gradient(96% 78% at 88% 102%, rgba(166, 106, 69, 0.13) 0%, rgba(166, 106, 69, 0) 62%),
-    #241a16;
+  /* Brand + labels */
+  --tint: #0066cc;
+  --tint-fill: #0066cc; /* filled buttons/chips behind white text: 5.6:1 */
+  --tint-pressed: #0058b0;
+  --tint-soft: rgba(0, 102, 204, 0.12);
+  --on-tint: #ffffff;
+  --label: #1d1d1f;
+  --label-2: #6e6e73; /* secondary: 4.9:1 on #F5F5F7 */
+  --label-3: #8e8e93; /* placeholders and decoration only */
 
-  /* Type */
-  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --fs-screen: 1.6471rem; /* 28 */
-  --fs-figure: 1.4118rem; /* 24 */
-  --fs-sheet: 1.2353rem; /* 21 */
-  --fs-section: 1.1176rem; /* 19 */
+  /* Surfaces */
+  --bg: #f5f5f7; /* grouped background */
+  --surface: #ffffff; /* cells, cards */
+  --surface-raised: #ffffff; /* sheets */
+  --fill: rgba(120, 120, 128, 0.12); /* text fields, chips, segmented track */
+  --fill-strong: rgba(120, 120, 128, 0.2);
+  --separator: rgba(60, 60, 67, 0.18);
+  --scrim: rgba(0, 0, 0, 0.32);
+  --thumb: #ffffff; /* segmented control thumb */
+
+  /* iOS system colours: fill (backgrounds, icon tiles) and text (accessible variants) */
+  --red: #ff3b30;
+  --red-text: #c4000f;
+  --orange: #ff9500;
+  --orange-text: #c93400;
+  --green: #34c759;
+  --green-text: #1b7331;
+  --blue-text: #0058b0;
+  --gray: #8e8e93;
+  --gray-text: #636366;
+  --indigo: #5856d6;
+  --teal: #30b0c7;
+
+  /* Liquid glass */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-edge: rgba(0, 0, 0, 0.06);
+  --glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  --glass-filter: blur(22px) saturate(180%);
+  --sheet-shadow: 0 -2px 40px rgba(0, 0, 0, 0.14);
+
+  /* Type: iOS text styles at the default size (rem = px / 17) */
+  --font:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto,
+    'Helvetica Neue', sans-serif;
+  --fs-large-title: 2rem; /* 34 */
+  --fs-title1: 1.6471rem; /* 28 */
+  --fs-title2: 1.2941rem; /* 22 */
+  --fs-title3: 1.1765rem; /* 20 */
+  --fs-headline: 1rem; /* 17 semibold */
   --fs-body: 1rem; /* 17 */
-  --fs-row: 0.9412rem; /* 16 */
-  --fs-15: 0.8824rem; /* 15 */
-  --fs-caption: 0.8235rem; /* 14 */
-  --fs-meta: 0.7647rem; /* 13 */
-  --fs-fine: 0.7059rem; /* 12 */
+  --fs-callout: 0.9412rem; /* 16 */
+  --fs-subhead: 0.8824rem; /* 15 */
+  --fs-footnote: 0.7647rem; /* 13 */
+  --fs-caption1: 0.7059rem; /* 12 */
+  --fs-caption2: 0.6471rem; /* 11 */
 
-  --lh-body: 1.47;
-  --lh-title: 1.14;
-  --track-title: -0.374px;
-  --track-caption: -0.224px;
-  --track-meta: -0.12px;
-
-  --w-light: 300;
-  --w-regular: 400;
-  --w-semibold: 600;
-  --w-bold: 700;
+  /* Apple tracking table: tight in the middle, opens up at display sizes and tiny sizes */
+  --tr-large-title: 0.4px;
+  --tr-title1: 0.38px;
+  --tr-title2: -0.26px;
+  --tr-title3: -0.45px;
+  --tr-body: -0.43px;
+  --tr-callout: -0.32px;
+  --tr-subhead: -0.24px;
+  --tr-footnote: -0.08px;
+  --tr-caption: 0px;
 
   /* Space */
   --s-1: 4px;
   --s-2: 8px;
   --s-3: 12px;
   --s-4: 16px;
-  --s-5: 24px;
-  --s-6: 32px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
   --gutter: 16px;
 
-  /* Shape */
-  --r-sm: 8px;
-  --r-input: 11px;
-  --r-card: 18px;
+  /* Shape (concentric: bigger containers, bigger radii) */
+  --r-field: 12px;
+  --r-tile: 8px; /* icon tiles */
+  --r-group: 22px; /* inset grouped lists, cards */
+  --r-sheet: 38px;
   --r-pill: 999px;
 
   /* Chrome */
   --tap: 44px;
-  --tabbar-h: 84px;
+  --tabbar-h: 62px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
+  --dock-bottom: max(var(--safe-bottom), 12px);
 
   /* Motion */
-  --press-scale: 0.95;
+  --press-scale: 0.97;
   --dur-press: 120ms;
-  --dur-fade: 240ms;
-  --dur-scrim: 300ms;
-  --dur-sheet: 420ms;
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-sheet: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 180ms;
+  --dur-fade: 220ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  /* Critically damped spring (damping 1.0, response ≈ 0.4s) sampled for CSS. */
+  --spring: linear(
+    0,
+    0.0401,
+    0.1313,
+    0.2431,
+    0.3577,
+    0.4656,
+    0.562,
+    0.6452,
+    0.7154,
+    0.7736,
+    0.821,
+    0.8594,
+    0.89,
+    0.9144,
+    0.9336,
+    0.9487,
+    0.9605,
+    0.9696,
+    0.9767,
+    0.9822,
+    0.9864,
+    0.9896,
+    0.9921,
+    0.994,
+    1
+  );
+  --dur-spring: 480ms;
+}
 
-  --focus-ring: 2px solid var(--copper-focus);
+/* Dark mode: follows the iPhone setting. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tint: #2997ff; /* text and links on black: 6.6:1 */
+    --tint-fill: #0071e3; /* white text on it: 4.7:1 */
+    --tint-pressed: #4aa8ff;
+    --tint-soft: rgba(41, 151, 255, 0.18);
+    --label: #f5f5f7;
+    --label-2: #a1a1a6;
+    --label-3: #6e6e73;
+
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --surface-raised: #1c1c1e;
+    --fill: rgba(120, 120, 128, 0.24);
+    --fill-strong: rgba(120, 120, 128, 0.36);
+    --separator: rgba(84, 84, 88, 0.65);
+    --scrim: rgba(0, 0, 0, 0.5);
+    --thumb: #636366;
+
+    --red: #ff453a;
+    --red-text: #ff6961;
+    --orange: #ff9f0a;
+    --orange-text: #ffb340;
+    --green: #30d158;
+    --green-text: #30db5b;
+    --blue-text: #64b5ff;
+    --gray: #8e8e93;
+    --gray-text: #aeaeb2;
+    --indigo: #5e5ce6;
+    --teal: #40c8e0;
+
+    --glass-bg: rgba(44, 44, 46, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-edge: rgba(0, 0, 0, 0.4);
+    --glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --sheet-shadow: 0 -2px 40px rgba(0, 0, 0, 0.6);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --dur-press: 0ms;
-    --dur-fade: 0ms;
-    --dur-scrim: 0ms;
-    --dur-sheet: 0ms;
     --press-scale: 1;
+    --dur-spring: 200ms;
+    --spring: ease;
+  }
+}
+
+/* Reduce transparency: glass becomes solid. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: var(--surface);
+    --glass-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --label-2: var(--label);
+    --separator: var(--label-2);
+    --glass-bg: var(--surface);
+    --glass-border: var(--label-2);
   }
 }

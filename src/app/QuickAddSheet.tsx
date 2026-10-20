@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/Button';
-import { ChoiceGroup } from '@/components/Chip';
+import { Segmented } from '@/components/Chip';
 import { SelectField, TextField } from '@/components/Field';
 import { Sheet } from '@/components/Sheet';
 import { useToast } from '@/components/Toast';
@@ -82,7 +82,7 @@ export function QuickAddSheet({ open, onClose }: Props) {
             </option>
           ))}
         </SelectField>
-        <ChoiceGroup
+        <Segmented
           label="Next action owner"
           options={OWNERS.map((o) => ({ value: o, label: o }))}
           value={form.owner}

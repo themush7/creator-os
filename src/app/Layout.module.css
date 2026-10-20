@@ -7,10 +7,31 @@
 .main {
   max-width: 640px;
   margin: 0 auto;
-  padding-bottom: calc(160px + var(--safe-bottom));
+  padding-bottom: calc(var(--dock-bottom) + var(--tabbar-h) + 48px);
   outline: none;
 }
 
 .detail {
-  padding-bottom: calc(110px + var(--safe-bottom));
+  padding-bottom: calc(var(--dock-bottom) + 96px);
+}
+
+/* Scroll edge effect: content softens under the status bar instead of a hard divider. */
+.edge {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--safe-top) + 16px);
+  z-index: 15;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    color-mix(in srgb, var(--bg) 70%, transparent) 60%,
+    transparent 100%
+  );
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  mask-image: linear-gradient(to bottom, #000 50%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent);
 }

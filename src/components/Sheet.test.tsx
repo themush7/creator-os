@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, it } from 'vitest';
 import { Sheet } from './Sheet';
-import { ChoiceGroup } from './Chip';
+import { Segmented } from './Chip';
 
 function Harness() {
   const [open, setOpen] = useState(false);
@@ -12,7 +12,7 @@ function Harness() {
     <div id="root">
       <button onClick={() => setOpen(true)}>Open</button>
       <Sheet open={open} onClose={() => setOpen(false)} title="Mark live" subtitle="Kohl Coffee">
-        <ChoiceGroup
+        <Segmented
           label="Rights term"
           value={v}
           onChange={setV}
@@ -58,7 +58,7 @@ describe('Sheet', () => {
   });
 });
 
-describe('ChoiceGroup', () => {
+describe('Segmented', () => {
   it('uses radio semantics and arrow keys', async () => {
     const user = userEvent.setup();
     render(<Harness />);

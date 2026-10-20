@@ -1,7 +1,7 @@
 .track {
-  height: 3px;
+  height: 4px;
   border-radius: 2px;
-  background: var(--divider-soft);
+  background: var(--fill);
   overflow: hidden;
 }
 
@@ -10,16 +10,24 @@
   border-radius: 2px;
 }
 
-.copper {
-  background: var(--copper);
+.tint {
+  background: var(--tint);
 }
 
-.espresso {
-  background: var(--espresso);
+.green {
+  background: var(--green);
 }
 
-.hairline {
-  background: var(--hairline);
+.orange {
+  background: var(--orange);
+}
+
+.red {
+  background: var(--red);
+}
+
+.gray {
+  background: var(--gray);
 }
 
 .segments {
@@ -29,11 +37,11 @@
 
 .segment {
   flex: 1;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--hairline);
+  height: 5px;
+  border-radius: 3px;
+  background: var(--fill-strong);
 }
 
 .reached {
-  background: var(--copper);
+  background: var(--tint);
 }

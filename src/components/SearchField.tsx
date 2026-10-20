@@ -1,4 +1,4 @@
-import { Search, X } from 'lucide-react';
+import { CircleX, Search } from 'lucide-react';
 import { IconButton } from './IconButton';
 import styles from './SearchField.module.css';
 
@@ -12,7 +12,7 @@ interface Props {
 export function SearchField({ value, onChange, placeholder = 'Search', label = 'Search' }: Props) {
   return (
     <div className={styles.search} role="search">
-      <Search size={16} strokeWidth={1.75} aria-hidden />
+      <Search size={18} strokeWidth={2} aria-hidden />
       <input
         type="search"
         className={styles.input}
@@ -25,7 +25,14 @@ export function SearchField({ value, onChange, placeholder = 'Search', label = '
         onChange={(e) => onChange(e.target.value)}
       />
       {value && (
-        <IconButton icon={X} label="Clear search" iconSize={16} onClick={() => onChange('')} />
+        <IconButton
+          icon={CircleX}
+          label="Clear search"
+          tone="plain"
+          iconSize={18}
+          style={{ color: 'var(--label-3)' }}
+          onClick={() => onChange('')}
+        />
       )}
     </div>
   );

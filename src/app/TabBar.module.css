@@ -1,59 +1,91 @@
-.tabbar {
+/* iOS 26: the tab bar floats as a glass capsule above the home indicator. */
+.dock {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: calc(var(--gutter) + var(--safe-left));
+  right: calc(var(--gutter) + var(--safe-right));
+  bottom: var(--dock-bottom);
   z-index: 20;
   display: flex;
-  height: calc(50px + max(var(--safe-bottom), 8px));
-  min-height: 58px;
-  padding: 4px calc(8px + var(--safe-right)) max(var(--safe-bottom), 8px)
-    calc(8px + var(--safe-left));
-  background: var(--frosted);
-  -webkit-backdrop-filter: var(--frosted-filter);
-  backdrop-filter: var(--frosted-filter);
-  border-top: 1px solid var(--hairline);
+  align-items: center;
+  gap: 10px;
+  max-width: 560px;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.tabbar {
+  composes: glass from global;
+  flex: 1;
+  height: var(--tabbar-h);
+  border-radius: var(--r-pill);
+  padding: 4px;
+  pointer-events: auto;
 }
 
 .list {
-  display: flex;
-  flex: 1;
-  max-width: 640px;
-  margin: 0 auto;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 100%;
+}
+
+/* The selection "lens" slides between tabs on a spring. */
+.lens {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 25%;
+  border-radius: var(--r-pill);
+  background: var(--fill);
+  transition: transform var(--dur-spring) var(--spring);
+  pointer-events: none;
 }
 
 .item {
-  flex: 1;
   display: flex;
+  min-width: 0;
 }
 
 .tab {
+  position: relative;
   flex: 1;
-  min-height: var(--tap);
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  color: var(--ink-48);
-  font-size: var(--fs-fine);
-  letter-spacing: var(--track-meta);
-  font-weight: var(--w-regular);
+  gap: 2px;
+  border-radius: var(--r-pill);
+  color: var(--label);
+  font-size: var(--fs-caption2);
+  font-weight: 600;
+  letter-spacing: 0.06px;
 }
 
-.tab:hover {
-  color: var(--ink-48);
+.active {
+  color: var(--tint);
 }
 
-.active,
-.active:hover {
-  color: var(--copper);
-  font-weight: var(--w-semibold);
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    color: var(--label);
+  }
+
+  .active:hover {
+    color: var(--tint);
+  }
 }
 
-.fab {
-  position: fixed;
-  right: calc(var(--gutter) + var(--safe-right));
-  bottom: calc(max(var(--safe-bottom), 8px) + 50px + 16px);
-  z-index: 20;
+.add {
+  composes: glass from global;
+  width: var(--tabbar-h);
+  height: var(--tabbar-h);
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-pill);
+  color: var(--tint);
+  pointer-events: auto;
 }

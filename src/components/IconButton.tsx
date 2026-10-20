@@ -6,14 +6,14 @@ interface Props extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'
   icon: LucideIcon;
   /** Accessible name. Required: an icon alone has none. */
   label: string;
-  tone?: 'light' | 'plain' | 'translucent' | 'dark' | 'parchment';
+  tone?: 'glass' | 'fill' | 'tinted' | 'plain';
   iconSize?: number;
 }
 
 export function IconButton({
   icon: Icon,
   label,
-  tone = 'plain',
+  tone = 'glass',
   iconSize = 20,
   className,
   type = 'button',
@@ -28,7 +28,7 @@ export function IconButton({
         .join(' ')}
       {...rest}
     >
-      <Icon size={iconSize} strokeWidth={1.75} aria-hidden />
+      <Icon size={iconSize} strokeWidth={2} aria-hidden />
     </button>
   );
 }

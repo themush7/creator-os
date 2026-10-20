@@ -5,11 +5,13 @@
 }
 
 html {
-  font-size: 106.25%; /* 17px root */
+  font-size: 106.25%; /* 17px root = iOS body */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent; /* no grey flash on tap */
+  overscroll-behavior: none; /* no pull-to-refresh hijacking the app */
 }
 
 /* iOS: follow the system Dynamic Type setting (17px at the default size). */
@@ -22,15 +24,15 @@ html {
 body {
   margin: 0;
   min-height: 100dvh;
-  background: var(--parchment);
-  color: var(--ink);
-  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--label);
+  font-family: var(--font);
   font-size: var(--fs-body);
-  font-weight: var(--w-regular);
-  line-height: var(--lh-body);
-  letter-spacing: var(--track-title);
-  overscroll-behavior-y: none;
-  -webkit-tap-highlight-color: transparent;
+  font-weight: 400;
+  line-height: 1.29;
+  letter-spacing: var(--tr-body);
+  font-optical-sizing: auto;
+  overscroll-behavior: none;
 }
 
 h1,
@@ -66,6 +68,13 @@ textarea {
   letter-spacing: inherit;
 }
 
+/* 16px minimum so iOS never zooms into a field. Ours are 17px. */
+input,
+select,
+textarea {
+  font-size: max(1rem, 16px);
+}
+
 button {
   background: none;
   border: 0;
@@ -74,17 +83,32 @@ button {
   text-align: inherit;
 }
 
+/* Controls are not content: no 300ms delay, no text selection, no long-press callout. */
+button,
+a,
+[role='button'],
+[role='radio'],
+[role='tab'],
+label {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 a {
-  color: var(--copper);
+  color: var(--tint);
   text-decoration: none;
 }
 
-a:hover {
-  color: var(--copper-focus);
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    color: var(--tint-pressed);
+  }
 }
 
 :focus-visible {
-  outline: var(--focus-ring);
+  outline: 3px solid color-mix(in srgb, var(--tint) 60%, transparent);
   outline-offset: 2px;
 }
 
@@ -104,50 +128,84 @@ a:hover {
   font-variant-numeric: tabular-nums;
 }
 
-/* Press: the one micro-interaction. No hover states. */
+/* Press feedback: instant on touch-down, released fast. */
 .pressable {
-  transition: transform var(--dur-press) var(--ease-standard);
-  -webkit-user-select: none;
-  user-select: none;
+  transition:
+    transform 160ms var(--ease-out),
+    opacity 160ms var(--ease-out);
 }
 
 .pressable:active:not(:disabled):not([aria-disabled='true']) {
   transform: scale(var(--press-scale));
+  transition-duration: 80ms;
 }
 
-/* Headings */
-.t-screen {
-  font-size: var(--fs-screen);
-  font-weight: var(--w-semibold);
-  line-height: var(--lh-title);
-  letter-spacing: var(--track-title);
+/* Rows in lists dim instead of shrinking, like iOS cells. */
+.row-press {
+  transition: background-color 200ms var(--ease-out);
 }
 
-.t-section {
-  font-size: var(--fs-section);
-  font-weight: var(--w-semibold);
-  line-height: 1.24;
-  letter-spacing: var(--track-title);
+.row-press:active {
+  background-color: var(--fill);
+  transition-duration: 0ms;
 }
 
-.t-card {
-  font-size: var(--fs-body);
-  font-weight: var(--w-semibold);
-  line-height: 1.24;
-  letter-spacing: var(--track-title);
+/* iOS text styles */
+.t-large-title {
+  font-size: var(--fs-large-title);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--tr-large-title);
 }
 
-.t-meta {
-  font-size: var(--fs-meta);
-  line-height: 1.35;
-  letter-spacing: var(--track-meta);
-  color: var(--ink-48);
+.t-title1 {
+  font-size: var(--fs-title1);
+  font-weight: 700;
+  line-height: 1.21;
+  letter-spacing: var(--tr-title1);
+}
+
+.t-title2 {
+  font-size: var(--fs-title2);
+  font-weight: 700;
+  line-height: 1.27;
+  letter-spacing: var(--tr-title2);
+}
+
+.t-title3 {
+  font-size: var(--fs-title3);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: var(--tr-title3);
+}
+
+.t-headline {
+  font-size: var(--fs-headline);
+  font-weight: 600;
+  line-height: 1.29;
+  letter-spacing: var(--tr-body);
+}
+
+.t-subhead {
+  font-size: var(--fs-subhead);
+  line-height: 1.33;
+  letter-spacing: var(--tr-subhead);
+}
+
+.t-footnote {
+  font-size: var(--fs-footnote);
+  line-height: 1.38;
+  letter-spacing: var(--tr-footnote);
 }
 
 .t-caption {
-  font-size: var(--fs-caption);
-  line-height: 1.43;
-  letter-spacing: var(--track-caption);
+  font-size: var(--fs-caption1);
+  line-height: 1.33;
+  letter-spacing: var(--tr-caption);
+}
+
+.secondary {
+  color: var(--label-2);
 }
 
 .ellipsis {
@@ -157,7 +215,7 @@ a:hover {
   text-overflow: ellipsis;
 }
 
-/* Form labels, shared by Field and ChoiceGroup */
+/* Form labels, shared by Field and Segmented */
 .field-block {
   display: flex;
   flex-direction: column;
@@ -165,8 +223,18 @@ a:hover {
 }
 
 .field-label {
-  font-size: var(--fs-caption);
-  font-weight: var(--w-semibold);
-  color: var(--ink-80);
-  letter-spacing: var(--track-caption);
+  padding: 0 var(--s-4);
+  font-size: var(--fs-footnote);
+  font-weight: 600;
+  color: var(--label-2);
+  letter-spacing: var(--tr-footnote);
+}
+
+/* Liquid glass material */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  border: 0.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
 }

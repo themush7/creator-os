@@ -1,21 +1,21 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--s-4);
+  gap: var(--s-5);
 }
 
 .fine {
-  font-size: var(--fs-fine);
-  color: var(--ink-48);
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
   text-align: center;
-  letter-spacing: var(--track-meta);
+  letter-spacing: var(--tr-footnote);
 }
 
 .note {
-  font-size: var(--fs-caption);
-  color: var(--ink-80);
-  background: var(--parchment);
-  border-radius: var(--r-input);
-  padding: var(--s-3) 14px;
-  letter-spacing: var(--track-caption);
+  font-size: var(--fs-subhead);
+  color: var(--label-2);
+  background: var(--fill);
+  border-radius: var(--r-field);
+  padding: var(--s-3) var(--s-4);
+  letter-spacing: var(--tr-subhead);
 }

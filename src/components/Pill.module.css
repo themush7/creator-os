@@ -2,38 +2,38 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  min-height: 24px;
-  padding: 2px 9px;
+  min-height: 22px;
+  padding: 2px 8px 2px 6px;
   border-radius: var(--r-pill);
-  border: 1px solid transparent;
-  font-size: var(--fs-fine);
-  font-weight: var(--w-semibold);
+  font-size: var(--fs-caption1);
+  font-weight: 600;
   line-height: 1.2;
-  letter-spacing: var(--track-meta);
+  letter-spacing: var(--tr-caption);
   white-space: nowrap;
   flex: none;
 }
 
-.attention {
-  background: var(--white);
-  color: var(--copper);
-  border-color: var(--copper);
+.red {
+  background: color-mix(in srgb, var(--red) 14%, transparent);
+  color: var(--red-text);
 }
 
-.alert {
-  background: var(--espresso);
-  color: var(--white);
-  border-color: var(--espresso);
+.orange {
+  background: color-mix(in srgb, var(--orange) 16%, transparent);
+  color: var(--orange-text);
 }
 
-.neutral {
-  background: var(--parchment);
-  color: var(--ink-80);
-  border-color: var(--parchment);
+.green {
+  background: color-mix(in srgb, var(--green) 16%, transparent);
+  color: var(--green-text);
 }
 
-.quiet {
-  background: var(--white);
-  color: var(--ink-48);
-  border-color: var(--hairline);
+.tint {
+  background: var(--tint-soft);
+  color: var(--blue-text);
+}
+
+.gray {
+  background: var(--fill);
+  color: var(--gray-text);
 }

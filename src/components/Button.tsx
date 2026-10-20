@@ -2,7 +2,8 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'pearl' | 'link';
+export type ButtonVariant =
+  'primary' | 'secondary' | 'gray' | 'destructive' | 'glass' | 'compact' | 'plain';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -27,15 +28,15 @@ export function Button({
     styles[variant],
     fullWidth && styles.full,
     large && styles.large,
-    'pressable',
+    variant !== 'plain' && 'pressable',
     className,
   ]
     .filter(Boolean)
     .join(' ');
-  const iconSize = variant === 'pearl' ? 14 : 18;
+  const iconSize = variant === 'compact' ? 16 : 20;
   return (
     <button type={type} className={cls} {...rest}>
-      {Icon && <Icon size={iconSize} strokeWidth={1.75} aria-hidden />}
+      {Icon && <Icon size={iconSize} strokeWidth={2} aria-hidden />}
       {children}
     </button>
   );

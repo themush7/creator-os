@@ -1,10 +1,10 @@
+/* Inset grouped surface: white (or #1C1C1E) on the grouped background, no border, no shadow. */
 .card {
   display: block;
   width: 100%;
-  background: var(--white);
-  border: 1px solid var(--hairline);
-  border-radius: var(--r-card);
-  color: var(--ink);
+  background: var(--surface);
+  border-radius: var(--r-group);
+  color: var(--label);
   text-align: left;
 }
 

@@ -2,15 +2,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--s-2);
+  gap: 6px;
   min-height: var(--tap);
-  padding: 11px 22px;
+  padding: 0 20px;
   border-radius: var(--r-pill);
-  border: 1px solid transparent;
   font-size: var(--fs-body);
-  font-weight: var(--w-regular);
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: var(--track-title);
+  letter-spacing: var(--tr-body);
   white-space: nowrap;
   text-align: center;
 }
@@ -21,58 +20,72 @@
 }
 
 .large {
-  min-height: 48px;
+  min-height: 50px;
 }
 
+/* Prominent: filled tint */
 .primary {
-  background: var(--copper);
-  color: var(--white);
+  background: var(--tint-fill);
+  color: var(--on-tint);
 }
 
+/* Bordered / tinted: soft tint fill, tint label */
 .secondary {
-  background: transparent;
-  color: var(--copper);
-  border-color: var(--copper);
+  background: var(--tint-soft);
+  color: var(--tint);
 }
 
-.pearl {
-  min-height: 36px;
-  padding: 6px 14px;
-  gap: var(--s-1);
-  border: 3px solid var(--divider-soft);
-  border-radius: var(--r-input);
-  background: var(--pearl);
-  color: var(--ink-80);
-  font-size: var(--fs-caption);
-  letter-spacing: var(--track-caption);
-  /* Keep a 44px hit area around the 36px capsule. */
+/* Gray: neutral fill */
+.gray {
+  background: var(--fill);
+  color: var(--label);
+}
+
+.destructive {
+  background: color-mix(in srgb, var(--red) 14%, transparent);
+  color: var(--red-text);
+}
+
+/* Glass capsule, for actions floating over content */
+.glass {
+  composes: glass from global;
+  color: var(--label);
+}
+
+/* Small tinted capsule for in-card actions ("+ Invoice") */
+.compact {
+  min-height: 32px;
+  padding: 0 14px;
+  gap: 4px;
+  background: var(--tint-soft);
+  color: var(--tint);
+  font-size: var(--fs-subhead);
+  letter-spacing: var(--tr-subhead);
   position: relative;
 }
 
-.pearl::after {
+/* Keep a 44px hit area around the 32px capsule. */
+.compact::after {
   content: '';
   position: absolute;
-  inset: -6px -2px;
+  inset: -6px -4px;
 }
 
-.link {
+/* Text-only: links and toolbar actions */
+.plain {
   min-height: var(--tap);
   padding: 0;
-  border: 0;
   background: none;
-  color: var(--copper);
-  font-size: var(--fs-15);
-  letter-spacing: var(--track-caption);
+  color: var(--tint);
+  font-weight: 400;
 }
 
 .button:disabled {
-  background: var(--divider-soft);
-  color: var(--ink-48);
-  border-color: transparent;
+  background: var(--fill);
+  color: var(--label-3);
   cursor: default;
 }
 
-.secondary:disabled {
-  background: transparent;
-  border-color: var(--hairline);
+.plain:disabled {
+  background: none;
 }

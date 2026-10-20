@@ -4,37 +4,27 @@
   z-index: 70;
   background: var(--scrim);
   opacity: 0;
-  transition: opacity var(--dur-scrim) ease;
 }
 
-.scrimVisible {
-  opacity: 1;
-}
-
+/* iOS 26 sheet: floats inset from the screen edges with concentric corners. */
 .sheet {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: calc(8px + var(--safe-left));
+  right: calc(8px + var(--safe-right));
+  bottom: max(calc(var(--safe-bottom) - 26px), 8px);
   z-index: 80;
   max-height: calc(100dvh - var(--safe-top) - 24px);
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  max-width: 640px;
-  background: var(--white);
-  border-radius: var(--r-card) var(--r-card) 0 0;
-  transform: translateY(105%);
-  transition: transform var(--dur-sheet) var(--ease-sheet);
+  max-width: 620px;
+  background: var(--surface-raised);
+  border-radius: var(--r-sheet);
+  box-shadow: var(--sheet-shadow);
   outline: none;
-}
-
-.sheetVisible {
-  transform: translateY(0);
-}
-
-.dragging {
-  transition: none;
+  will-change: transform;
+  /* Hidden until the spring positions it, so there is no flash at y = 0. */
+  transform: translateY(110vh);
 }
 
 .full {
@@ -43,51 +33,53 @@
 
 .head {
   flex: none;
-  padding: var(--s-2) var(--gutter) 0;
+  padding: 6px var(--s-3) 0;
   touch-action: none;
+  cursor: grab;
 }
 
-.handle {
+.grabber {
   width: 36px;
   height: 5px;
   border-radius: 3px;
-  background: var(--hairline);
-  margin: 0 auto var(--s-3);
+  background: var(--fill-strong);
+  margin: 0 auto 6px;
 }
 
 .titleRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--s-3);
-  padding-bottom: var(--s-4);
+  display: grid;
+  grid-template-columns: var(--tap) 1fr var(--tap);
+  align-items: center;
+  gap: var(--s-2);
+  padding-bottom: var(--s-3);
 }
 
 .titles {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 2px;
   min-width: 0;
-  padding-top: 6px;
+  text-align: center;
 }
 
 .title {
-  font-size: var(--fs-sheet);
-  font-weight: var(--w-semibold);
-  line-height: 1.19;
-  letter-spacing: var(--track-title);
+  font-size: var(--fs-headline);
+  font-weight: 600;
+  line-height: 1.29;
+  letter-spacing: var(--tr-body);
 }
 
 .subtitle {
-  font-size: var(--fs-caption);
-  color: var(--ink-80);
-  letter-spacing: var(--track-caption);
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  letter-spacing: var(--tr-footnote);
 }
 
 .body {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 0 var(--gutter) calc(var(--s-6) + var(--safe-bottom));
+  padding: var(--s-2) var(--s-5) var(--s-6);
   -webkit-overflow-scrolling: touch;
 }

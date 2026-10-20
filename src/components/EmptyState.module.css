@@ -1,7 +1,7 @@
 .empty {
-  padding: var(--s-6) var(--s-2);
+  padding: var(--s-8) var(--s-4);
   text-align: center;
-  font-size: var(--fs-15);
-  color: var(--ink-48);
-  letter-spacing: var(--track-caption);
+  font-size: var(--fs-subhead);
+  color: var(--label-2);
+  letter-spacing: var(--tr-subhead);
 }

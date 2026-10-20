@@ -1,123 +1,170 @@
-.hero {
-  background: var(--hero-mesh);
-  color: var(--white);
-  padding: calc(var(--safe-top) + var(--s-1)) var(--gutter) var(--s-5);
-}
-
-.heroTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
-  min-height: var(--tap);
-}
-
-.date {
-  font-size: var(--fs-caption);
-  color: var(--on-dark-muted);
-  letter-spacing: var(--track-caption);
-}
-
-.summary {
-  font-size: var(--fs-15);
-  color: var(--copper-soft);
-  margin-top: 6px;
-  letter-spacing: var(--track-caption);
-}
-
-.attention {
-  margin-top: var(--s-4);
-  background: var(--espresso-2);
-  border-radius: var(--r-card);
+.list {
   overflow: hidden;
 }
 
-.item {
+.row {
   display: flex;
   align-items: center;
   gap: var(--s-3);
   width: 100%;
-  min-height: 64px;
-  padding: var(--s-3) 14px;
-  color: var(--white);
+  min-height: 60px;
+  padding: 10px var(--s-4);
+  color: var(--label);
   text-align: left;
+  position: relative;
 }
 
-.item + .item {
-  border-top: 1px solid var(--espresso-line);
+/* Inset separator, starting after the icon like iOS cells. */
+.row + .row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 58px;
+  height: 0.5px;
+  background: var(--separator);
 }
 
-.disc {
-  width: 36px;
-  height: 36px;
+.tile {
+  width: 30px;
+  height: 30px;
   flex: none;
-  border-radius: var(--r-pill);
+  border-radius: var(--r-tile);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--espresso-line);
-  color: var(--copper-soft);
+  color: #fff;
 }
 
-.discAlert {
-  background: var(--white);
-  color: var(--espresso);
-}
-
-.itemText {
+.rowText {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
-.itemTitle {
-  font-size: var(--fs-15);
-  font-weight: var(--w-semibold);
-  letter-spacing: var(--track-caption);
+.rowTitle {
+  font-size: var(--fs-body);
+  letter-spacing: var(--tr-body);
 }
 
-.itemSub {
-  font-size: var(--fs-meta);
-  color: var(--on-dark-muted);
-  letter-spacing: var(--track-meta);
+.rowSub {
+  font-size: var(--fs-subhead);
+  color: var(--label-2);
+  letter-spacing: var(--tr-subhead);
+}
+
+.chevron {
+  color: var(--label-3);
+  flex: none;
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--s-2);
+  gap: var(--s-3);
 }
 
 .figure {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px var(--s-4);
+  gap: 4px;
+  padding: 14px var(--s-4) var(--s-4);
 }
 
 .figureLabel {
-  font-size: var(--fs-meta);
-  color: var(--ink-80);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-subhead);
+  font-weight: 600;
+  letter-spacing: var(--tr-subhead);
 }
 
 .figureValue {
-  font-size: var(--fs-figure);
-  font-weight: var(--w-semibold);
-  letter-spacing: var(--track-title);
+  font-size: var(--fs-title2);
+  font-weight: 700;
+  letter-spacing: var(--tr-title2);
   font-variant-numeric: tabular-nums;
 }
 
-.stack {
+.card {
   display: flex;
   flex-direction: column;
   gap: var(--s-3);
+  width: 100%;
+  padding: var(--s-4);
+  text-align: left;
+  color: var(--label);
 }
 
-.row {
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.cardNames {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.fee {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.stageLine {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  margin-bottom: 6px;
+}
+
+.nextLine {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-subhead);
+  letter-spacing: var(--tr-subhead);
+}
+
+.due {
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  white-space: nowrap;
+}
+
+.dueUrgent {
+  color: var(--orange-text);
+  font-weight: 600;
+}
+
+.cardFoot {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: var(--s-3);
+  border-top: 0.5px solid var(--separator);
+}
+
+.wrap {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-2);
   align-items: center;
+}
+
+.padded {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4);
 }

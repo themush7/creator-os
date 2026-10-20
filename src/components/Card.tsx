@@ -8,7 +8,7 @@ interface Props extends HTMLAttributes<HTMLElement> {
   children: ReactNode;
 }
 
-/** White, 18px radius, 1px hairline, no shadow. */
+/** Inset grouped surface: 22px radius, no border, no shadow. */
 export function Card({ as: Tag = 'div', variant = 'padded', className, children, ...rest }: Props) {
   return (
     <Tag className={[styles.card, styles[variant], className].filter(Boolean).join(' ')} {...rest}>

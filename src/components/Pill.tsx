@@ -14,7 +14,7 @@ interface Props {
 export function Pill({ tone, icon: Icon, label }: Props) {
   return (
     <span className={`${styles.pill} ${styles[tone]}`}>
-      <Icon size={13} strokeWidth={1.75} aria-hidden />
+      <Icon size={13} strokeWidth={2.25} aria-hidden />
       {label}
     </span>
   );
