@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { ScreenHeader } from './Screen';
 import { Layout } from './Layout';
 import { BackgroundTasks } from './background';
+import { UpdatePrompt } from './UpdatePrompt';
 
 // Settings carries backup, import and Sheet code; load it only when opened.
 const Settings = lazy(() =>
@@ -28,6 +29,7 @@ export function App() {
   return (
     <BrowserRouter>
       <BackgroundTasks />
+      <UpdatePrompt />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />

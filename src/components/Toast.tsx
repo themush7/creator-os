@@ -14,6 +14,10 @@ import styles from './Toast.module.css';
 export interface ToastOptions {
   /** Shows an Undo button and keeps the toast up for 5 s. */
   undo?: () => void | Promise<void>;
+  /** Any other single action, e.g. "Reload". */
+  action?: { label: string; run: () => void | Promise<void> };
+  /** Milliseconds on screen; `Infinity` keeps it until acted on. */
+  duration?: number;
 }
 
 interface ToastApi {
@@ -25,12 +29,13 @@ const ToastContext = createContext<ToastApi | null>(null);
 const SHORT_MS = 2600;
 const UNDO_MS = 5000;
 
+interface Current {
+  message: string;
+  action?: { label: string; run: () => void | Promise<void> };
+}
+
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<{
-    message: string;
-    undo?: ToastOptions['undo'];
-    key: number;
-  } | null>(null);
+  const [state, setState] = useState<Current | null>(null);
   const [shown, setShown] = useState(false);
   const timer = useRef<number>();
 
@@ -39,11 +44,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setShown(false);
   }, []);
 
-  const show = useCallback<ToastApi['show']>((message, options) => {
+  const show = useCallback<ToastApi['show']>((message, options = {}) => {
     window.clearTimeout(timer.current);
-    setState({ message, undo: options?.undo, key: Date.now() });
+    const action = options.undo ? { label: 'Undo', run: options.undo } : options.action;
+    setState({ message, action });
     setShown(true);
-    timer.current = window.setTimeout(() => setShown(false), options?.undo ? UNDO_MS : SHORT_MS);
+    const ms = options.duration ?? (action ? UNDO_MS : SHORT_MS);
+    if (Number.isFinite(ms)) timer.current = window.setTimeout(() => setShown(false), ms);
   }, []);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
@@ -63,17 +70,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             {state && shown && (
               <>
                 <span>{state.message}</span>
-                {state.undo && (
+                {state.action && (
                   <button
                     type="button"
                     className={styles.undo}
                     onClick={async () => {
-                      const undo = state.undo;
+                      const run = state.action!.run;
                       hide();
-                      await undo?.();
+                      await run();
                     }}
                   >
-                    Undo
+                    {state.action.label}
                   </button>
                 )}
               </>

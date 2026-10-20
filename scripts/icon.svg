@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a7fe0"/>
+      <stop offset="1" stop-color="#0058b0"/>
+    </linearGradient>
+  </defs>
+  <!-- Full-bleed square: iOS and Android apply their own corner mask. -->
+  <rect width="1024" height="1024" fill="url(#g)"/>
+  <!-- Placeholder wordmark. The letter sits inside the 80% maskable safe zone. -->
+  <text x="512" y="700" text-anchor="middle" fill="#fff"
+        font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
+        font-size="560" font-weight="600" letter-spacing="-10">C</text>
+</svg>

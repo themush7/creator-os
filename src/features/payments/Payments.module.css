@@ -1,6 +1,9 @@
 .strip {
+  /* Three across at normal text sizes; wraps to two rows under large Dynamic Type instead of truncating. */
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 6.6rem), 1fr));
+  background: var(--surface);
+  overflow: hidden;
 }
 
 .cell {
@@ -9,10 +12,8 @@
   gap: 2px;
   padding: 12px var(--s-3) 14px;
   min-width: 0;
-}
-
-.cell + .cell {
-  border-left: 0.5px solid var(--separator);
+  /* Hairlines between cells in any arrangement; the card's overflow clips the outer edges. */
+  box-shadow: 0 0 0 0.5px var(--separator);
 }
 
 .cellLabel {
@@ -26,8 +27,6 @@
   letter-spacing: var(--tr-body);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .alert {
