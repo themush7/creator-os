@@ -179,35 +179,6 @@
   border-top: 0.5px solid var(--separator);
 }
 
-/* ── Skeleton ───────────────────────────────────────── */
-.skeleton {
-  background: var(--surface);
-  border-radius: var(--r-group);
-  position: relative;
-  overflow: hidden;
-}
-
-.skeleton::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, var(--fill), transparent);
-  transform: translateX(-100%);
-  animation: shimmer 1.4s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  to {
-    transform: translateX(100%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skeleton::after {
-    animation: none;
-  }
-}
-
 /* ── Misc ───────────────────────────────────────────── */
 .stack {
   display: flex;

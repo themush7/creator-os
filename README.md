@@ -117,11 +117,12 @@ On first launch from HTTPS, the app asks the browser for persistent storage. Set
 - The backup format is versioned (`schema: 1`). `migrateBackup()` upgrades older files, so they always
   import.
 
-### Google Sheet mirror (optional)
+### Google Sheet export (optional)
 
-A one-way copy for reading on a laptop: tabs for Collabs, Invoices, Rights and Activity, pushed a few
-seconds after each change when online. Edits in the Sheet are overwritten. Setup takes about five minutes;
-see [docs/google-sheet/README.md](docs/google-sheet/README.md). The script is
+Tap **Export to Google Sheet**, in Settings or on Home, to copy everything into your Sheet: tabs for
+Collabs, Invoices, Rights and Activity, for reading on a laptop. **Also update automatically** sends
+changes on its own. It is one way, and edits in the Sheet are overwritten. Setup takes about five
+minutes; see [docs/google-sheet/README.md](docs/google-sheet/README.md). The script is
 [docs/google-sheet/Code.gs](docs/google-sheet/Code.gs), and the app has a **Copy script** button.
 
 ## Project layout

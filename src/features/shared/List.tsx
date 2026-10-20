@@ -96,14 +96,4 @@ export function SectionHeader({
   );
 }
 
-export function Skeleton({ height, count = 1 }: { height: number; count?: number }) {
-  return (
-    <div className={styles.cards} aria-hidden>
-      {Array.from({ length: count }, (_, i) => (
-        <div key={i} className={styles.skeleton} style={{ height }} />
-      ))}
-    </div>
-  );
-}
-
 export { styles as sharedStyles };

@@ -35,7 +35,7 @@ import {
 import type { Collab, Invoice, RightsPeriod } from '@/domain/types';
 import { formatShort, relativeDayInline } from '@/lib/dates';
 import { inr, sum } from '@/lib/money';
-import { SectionHeader, Skeleton, sharedStyles } from '../shared/List';
+import { SectionHeader, sharedStyles } from '../shared/List';
 import styles from './Detail.module.css';
 
 type Field = [label: string, value: string | null | undefined];
@@ -119,17 +119,8 @@ export function CollabDetail() {
     </div>
   );
 
-  if (!ready) {
-    return (
-      <>
-        {bar}
-        <div className={styles.body}>
-          <Skeleton height={120} />
-          <Skeleton height={180} count={2} />
-        </div>
-      </>
-    );
-  }
+  // The local database answers in milliseconds; show the bar alone until it does.
+  if (!ready) return bar;
 
   if (!collab) {
     return (

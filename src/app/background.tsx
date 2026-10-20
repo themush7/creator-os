@@ -10,7 +10,8 @@ const RETRY_MS = 60_000;
 
 /**
  * Background chores with no UI of their own:
- * - pushes to the Google Sheet a few seconds after a change, when online, retrying while behind;
+ * - when automatic updates are on, pushes to the Google Sheet a few seconds after a change,
+ *   when online, retrying while behind (the Export button works regardless);
  * - asks the browser once to keep this app's storage persistent.
  */
 export function BackgroundTasks() {

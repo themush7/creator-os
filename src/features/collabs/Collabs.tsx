@@ -12,7 +12,7 @@ import {
   type CollabFilter,
 } from '@/domain/lists';
 import { CollabCard } from '../shared/CollabCard';
-import { Skeleton, sharedStyles } from '../shared/List';
+import { sharedStyles } from '../shared/List';
 
 const FILTER_KEY = 'creator-os.collabs-filter';
 
@@ -68,9 +68,7 @@ export function Collabs() {
         ))}
       </ChipScroller>
       <div className={screenStyles.body} style={{ paddingTop: 8 }}>
-        {!ready ? (
-          <Skeleton height={150} count={4} />
-        ) : list.length ? (
+        {!ready ? null : list.length ? (
           <div className={sharedStyles.cards}>
             {list.map((c) => (
               <CollabCard key={c.id} collab={c} index={index} today={today} from="Collabs" />

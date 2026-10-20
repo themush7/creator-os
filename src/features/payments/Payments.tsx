@@ -22,7 +22,7 @@ import {
 import { invoiceCash, invoiceRemaining, invoiceSettled, invoiceTds } from '@/domain/status';
 import { addMonths, formatShort, monthKey, monthLabel, monthShort } from '@/lib/dates';
 import { inr } from '@/lib/money';
-import { SectionHeader, Skeleton, sharedStyles } from '../shared/List';
+import { SectionHeader, sharedStyles } from '../shared/List';
 import styles from './Payments.module.css';
 
 export function Payments() {
@@ -82,9 +82,7 @@ export function Payments() {
       </ChipScroller>
 
       <div className={screenStyles.body} style={{ paddingTop: 8 }}>
-        {!ready ? (
-          <Skeleton height={140} count={3} />
-        ) : groups.length ? (
+        {!ready ? null : groups.length ? (
           groups.map((g) => (
             <section key={g.title} className={sharedStyles.stack} aria-label={g.title}>
               <SectionHeader title={g.title} aside={inr(g.total)} />

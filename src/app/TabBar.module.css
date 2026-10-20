@@ -64,7 +64,8 @@
 }
 
 .active {
-  color: var(--tint);
+  /* The accessible blue keeps 4.5:1 on the selection lens in light and dark. */
+  color: var(--blue-text);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -73,7 +74,7 @@
   }
 
   .active:hover {
-    color: var(--tint);
+    color: var(--blue-text);
   }
 }
 

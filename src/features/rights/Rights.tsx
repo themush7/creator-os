@@ -16,7 +16,7 @@ import {
   rightsStarted,
 } from '@/domain/status';
 import { formatShort } from '@/lib/dates';
-import { SectionHeader, Skeleton, sharedStyles } from '../shared/List';
+import { SectionHeader, sharedStyles } from '../shared/List';
 import styles from '../payments/Payments.module.css';
 
 const BAR_TONE = {
@@ -36,9 +36,7 @@ export function Rights() {
     <>
       <ScreenHeader title="Rights" subtitle="Ad usage windows run from the go-live date." />
       <div className={screenStyles.body}>
-        {!ready ? (
-          <Skeleton height={130} count={3} />
-        ) : groups.length ? (
+        {!ready ? null : groups.length ? (
           groups.map((g) => (
             <section key={g.title} className={sharedStyles.stack} aria-label={g.title}>
               <SectionHeader

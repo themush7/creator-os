@@ -5,6 +5,7 @@ import {
   Clock,
   Handshake,
   HardDrive,
+  Sheet,
   Hourglass,
   IndianRupee,
   Plus,
@@ -19,6 +20,7 @@ import { useAppData } from '@/app/data';
 import { ScreenHeader, screenStyles } from '@/app/Screen';
 import { useSheets } from '@/app/sheets';
 import { useToday } from '@/app/today';
+import { useSheetExport } from '@/app/useSheetExport';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { IconButton } from '@/components/IconButton';
@@ -35,7 +37,7 @@ import { BACKUP_STALE_DAYS, isActiveCollab } from '@/domain/status';
 import { diffDays, formatLong, formatShort, monthKey, monthLong, monthShort } from '@/lib/dates';
 import { inr, sum } from '@/lib/money';
 import { CollabCard } from '../shared/CollabCard';
-import { InsetList, ListRow, SectionHeader, Skeleton, sharedStyles } from '../shared/List';
+import { InsetList, ListRow, SectionHeader, sharedStyles } from '../shared/List';
 import styles from './Home.module.css';
 
 const RULE_TILE: Record<AttentionRule, { icon: LucideIcon; color: string }> = {
@@ -58,6 +60,7 @@ export function Home() {
   const navigate = useNavigate();
   const { openSheet } = useSheets();
   const { ready, index, settings } = useAppData();
+  const { exportNow, exporting } = useSheetExport();
   const data = index.data;
 
   const attention = useMemo(
@@ -91,16 +94,14 @@ export function Home() {
         }
       />
 
-      <div className={screenStyles.body}>
-        <section className={sharedStyles.stack} aria-labelledby="needs">
-          <SectionHeader id="needs" title="Needs you" />
-          <p className="t-subhead secondary" style={{ padding: '0 4px' }}>
-            {ready ? attentionSummary(attention.length) : ' '}
-          </p>
-          {!ready ? (
-            <Skeleton height={64 * 3} />
-          ) : (
-            attention.length > 0 && (
+      {ready && (
+        <div className={screenStyles.body}>
+          <section className={sharedStyles.stack} aria-labelledby="needs">
+            <SectionHeader id="needs" title="Needs you" />
+            <p className="t-subhead secondary" style={{ padding: '0 4px' }}>
+              {attentionSummary(attention.length)}
+            </p>
+            {attention.length > 0 && (
               <InsetList withTiles label="Needs you">
                 {attention.map((a) => (
                   <ListRow
@@ -112,133 +113,148 @@ export function Home() {
                   />
                 ))}
               </InsetList>
-            )
-          )}
-        </section>
+            )}
+          </section>
 
-        <section className={sharedStyles.stack} aria-labelledby="month">
-          <SectionHeader id="month" title={`${monthLong(month)} so far`} />
-          <div className={styles.grid}>
-            {(
-              [
-                ['Booked', inr(summary.booked), 'var(--blue-text)', CalendarCheck],
-                ['Received', inr(summary.received), 'var(--green-text)', ArrowDownLeft],
-                ['Outstanding', inr(summary.outstanding), 'var(--orange-text)', Clock],
-                ['Active collabs', String(active.length), 'var(--label-2)', Handshake],
-              ] as const
-            ).map(([label, value, color, Icon]) => (
-              <Card key={label} className={styles.figure}>
-                <span className={styles.figureLabel} style={{ color }}>
-                  <Icon size={15} strokeWidth={2.4} aria-hidden />
-                  {label}
-                </span>
-                <span className={styles.figureValue}>{ready ? value : '–'}</span>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        <section className={sharedStyles.stack} aria-labelledby="active">
-          <SectionHeader
-            id="active"
-            title="Active collaborations"
-            aside={
-              active.length > 0 && (
-                <Button variant="plain" onClick={() => navigate('/collabs')}>
-                  See all
-                </Button>
-              )
-            }
-          />
-          {!ready ? (
-            <Skeleton height={150} count={2} />
-          ) : active.length ? (
-            <div className={sharedStyles.cards}>
-              {active.slice(0, 4).map((c) => (
-                <CollabCard key={c.id} collab={c} index={index} today={today} from="Home" />
-              ))}
-            </div>
-          ) : (
-            <Card className={sharedStyles.emptyCard}>
-              <span className="t-headline">
-                {data.collabs.length ? 'Nothing active right now.' : 'No collaborations yet.'}
-              </span>
-              <span className="t-subhead secondary">
-                Add the first brand and campaign. Everything else can come later.
-              </span>
-              <Button icon={Plus} onClick={() => openSheet({ type: 'add' })}>
-                Add collaboration
-              </Button>
-            </Card>
-          )}
-        </section>
-
-        <section aria-labelledby="revenue">
-          <Card className={styles.revenue}>
-            <div className={sharedStyles.sectionHead} style={{ padding: 0 }}>
-              <h2 id="revenue" className="t-headline">
-                Revenue
-              </h2>
-              <span className={sharedStyles.footnote}>Last 6 months</span>
-            </div>
-            <div className={styles.legend} aria-hidden>
-              <span>
-                <i className={styles.swatchBooked} />
-                Booked
-              </span>
-              <span>
-                <i className={styles.swatchReceived} />
-                Received
-              </span>
-            </div>
-            <ul className={styles.chart}>
-              {trend.map((m, i) => (
-                <li
-                  key={m.month}
-                  className={styles.month}
-                  aria-label={`${monthLong(m.month)}: booked ${inr(m.booked)}, received ${inr(m.received)}`}
-                >
-                  <div className={styles.bars} aria-hidden>
-                    <div
-                      className={styles.barBooked}
-                      style={{ height: `${(m.booked / peak) * 96}px` }}
-                    />
-                    <div
-                      className={styles.barReceived}
-                      style={{ height: `${(m.received / peak) * 96}px` }}
-                    />
-                  </div>
-                  <span
-                    className={`${styles.monthLabel} ${i === trend.length - 1 ? styles.monthCurrent : ''}`}
-                    aria-hidden
-                  >
-                    {monthShort(m.month)}
+          <section className={sharedStyles.stack} aria-labelledby="month">
+            <SectionHeader id="month" title={`${monthLong(month)} so far`} />
+            <div className={styles.grid}>
+              {(
+                [
+                  ['Booked', inr(summary.booked), 'var(--blue-text)', CalendarCheck],
+                  ['Received', inr(summary.received), 'var(--green-text)', ArrowDownLeft],
+                  ['Outstanding', inr(summary.outstanding), 'var(--orange-text)', Clock],
+                  ['Active collabs', String(active.length), 'var(--label-2)', Handshake],
+                ] as const
+              ).map(([label, value, color, Icon]) => (
+                <Card key={label} className={styles.figure}>
+                  <span className={styles.figureLabel} style={{ color }}>
+                    <Icon size={15} strokeWidth={2.4} aria-hidden />
+                    {label}
                   </span>
-                </li>
+                  <span className={styles.figureValue}>{value}</span>
+                </Card>
               ))}
-            </ul>
-            <div className={styles.revenueFoot}>
-              <span className="secondary">Six-month received</span>
-              <span className={sharedStyles.money}>{inr(sum(trend.map((m) => m.received)))}</span>
             </div>
-          </Card>
-        </section>
+          </section>
 
-        <button
-          type="button"
-          className={`${styles.backup} ${backupStale ? styles.backupStale : ''}`}
-          onClick={() => navigate('/settings')}
-        >
-          <HardDrive size={16} strokeWidth={2} aria-hidden />
-          <span style={{ flex: 1 }}>
-            Saved on this device ·{' '}
-            {settings.lastBackupOn
-              ? `last backup ${formatShort(settings.lastBackupOn)}${backupStale ? ` · ${backupAge} days ago` : ''}`
-              : 'never backed up'}
-          </span>
-          <span className={styles.backupLink}>Back up</span>
-        </button>
-      </div>
+          <section className={sharedStyles.stack} aria-labelledby="active">
+            <SectionHeader
+              id="active"
+              title="Active collaborations"
+              aside={
+                active.length > 0 && (
+                  <Button variant="plain" onClick={() => navigate('/collabs')}>
+                    See all
+                  </Button>
+                )
+              }
+            />
+            {active.length ? (
+              <div className={sharedStyles.cards}>
+                {active.slice(0, 4).map((c) => (
+                  <CollabCard key={c.id} collab={c} index={index} today={today} from="Home" />
+                ))}
+              </div>
+            ) : (
+              <Card className={sharedStyles.emptyCard}>
+                <span className="t-headline">
+                  {data.collabs.length ? 'Nothing active right now.' : 'No collaborations yet.'}
+                </span>
+                <span className="t-subhead secondary">
+                  Add the first brand and campaign. Everything else can come later.
+                </span>
+                <Button icon={Plus} onClick={() => openSheet({ type: 'add' })}>
+                  Add collaboration
+                </Button>
+              </Card>
+            )}
+          </section>
+
+          <section aria-labelledby="revenue">
+            <Card className={styles.revenue}>
+              <div className={sharedStyles.sectionHead} style={{ padding: 0 }}>
+                <h2 id="revenue" className="t-headline">
+                  Revenue
+                </h2>
+                <span className={sharedStyles.footnote}>Last 6 months</span>
+              </div>
+              <div className={styles.legend} aria-hidden>
+                <span>
+                  <i className={styles.swatchBooked} />
+                  Booked
+                </span>
+                <span>
+                  <i className={styles.swatchReceived} />
+                  Received
+                </span>
+              </div>
+              <ul className={styles.chart}>
+                {trend.map((m, i) => (
+                  <li
+                    key={m.month}
+                    className={styles.month}
+                    aria-label={`${monthLong(m.month)}: booked ${inr(m.booked)}, received ${inr(m.received)}`}
+                  >
+                    <div className={styles.bars} aria-hidden>
+                      <div
+                        className={styles.barBooked}
+                        style={{ height: `${(m.booked / peak) * 96}px` }}
+                      />
+                      <div
+                        className={styles.barReceived}
+                        style={{ height: `${(m.received / peak) * 96}px` }}
+                      />
+                    </div>
+                    <span
+                      className={`${styles.monthLabel} ${i === trend.length - 1 ? styles.monthCurrent : ''}`}
+                      aria-hidden
+                    >
+                      {monthShort(m.month)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className={styles.revenueFoot}>
+                <span className="secondary">Six-month received</span>
+                <span className={sharedStyles.money}>{inr(sum(trend.map((m) => m.received)))}</span>
+              </div>
+            </Card>
+          </section>
+
+          <button
+            type="button"
+            className={`${styles.backup} ${backupStale ? styles.backupStale : ''}`}
+            onClick={() => navigate('/settings')}
+          >
+            <HardDrive size={16} strokeWidth={2} aria-hidden />
+            <span style={{ flex: 1 }}>
+              Saved on this device ·{' '}
+              {settings.lastBackupOn
+                ? `last backup ${formatShort(settings.lastBackupOn)}${backupStale ? ` · ${backupAge} days ago` : ''}`
+                : 'never backed up'}
+            </span>
+            <span className={styles.backupLink}>Back up</span>
+          </button>
+          {settings.sheetSync.url && (
+            <button
+              type="button"
+              className={styles.backup}
+              disabled={exporting}
+              onClick={exportNow}
+            >
+              <Sheet size={16} strokeWidth={2} aria-hidden />
+              <span style={{ flex: 1 }}>
+                Google Sheet ·{' '}
+                {settings.sheetSync.lastSyncedAt
+                  ? `exported ${new Date(settings.sheetSync.lastSyncedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`
+                  : 'not exported yet'}
+              </span>
+              <span className={styles.backupLink}>{exporting ? 'Exporting…' : 'Export'}</span>
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 }

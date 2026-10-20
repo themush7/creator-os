@@ -95,6 +95,26 @@ describe('runSync', () => {
     expect((await db.settings.get('app'))!.sheetSync.dirty).toBe(true);
   });
 
+  it('manual export runs with automatic updates off and creates the pairing key', async () => {
+    const s = (await db.settings.get('app'))!;
+    await db.settings.put({
+      ...s,
+      sheetSync: { ...s.sheetSync, enabled: false, dirty: false, key: '' },
+    });
+    const push = vi.fn(async (_url: string, _p: SheetPayload) => {});
+    expect(await runSync(db, SEED_TODAY, push)).toBe('skipped');
+    expect(await runSync(db, SEED_TODAY, push, { manual: true })).toBe('synced');
+    const key = (await db.settings.get('app'))!.sheetSync.key;
+    expect(key).toMatch(/^[A-Za-z0-9]{24}$/);
+    expect(push.mock.calls[0]![1].key).toBe(key);
+  });
+
+  it('manual export needs a URL', async () => {
+    const s = (await db.settings.get('app'))!;
+    await db.settings.put({ ...s, sheetSync: { ...s.sheetSync, url: '' } });
+    expect(await runSync(db, SEED_TODAY, vi.fn(), { manual: true })).toBe('skipped');
+  });
+
   it('records the error and stays dirty on failure', async () => {
     const push = vi.fn(async () => {
       throw new Error('The key does not match the script.');

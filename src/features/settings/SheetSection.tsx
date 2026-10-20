@@ -1,20 +1,20 @@
-import { Copy, ExternalLink, KeyRound, RefreshCw } from 'lucide-react';
+import { Copy, ExternalLink, Sheet } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useAppData } from '@/app/data';
 import { useToday } from '@/app/today';
+import { useSheetExport } from '@/app/useSheetExport';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/Field';
 import { Switch } from '@/components/Switch';
 import { useToast } from '@/components/Toast';
-import { db } from '@/db/db';
 import { updateSettings } from '@/domain/actions';
 import type { Settings } from '@/domain/types';
 import { copyText } from '@/lib/clipboard';
-import { generateKey, isAppsScriptUrl, runSync, testConnection } from '@/lib/sheetSync';
+import { isAppsScriptUrl, testConnection } from '@/lib/sheetSync';
 import script from '../../../docs/google-sheet/Code.gs?raw';
 import styles from './Settings.module.css';
 
-function ago(iso: string, now = Date.now()): string {
+export function exportedAgo(iso: string, now = Date.now()): string {
   const mins = Math.round((now - new Date(iso).getTime()) / 60_000);
   if (mins < 1) return 'just now';
   if (mins < 60) return `${mins} min ago`;
@@ -43,31 +43,25 @@ export function SheetSection() {
   const toast = useToast();
   const online = useOnline();
   const { settings } = useAppData();
+  const { exportNow, exporting } = useSheetExport();
   const s = settings.sheetSync;
   const [url, setUrl] = useState<string | null>(null);
   const [sheetUrl, setSheetUrl] = useState<string | null>(null);
-  const [busy, setBusy] = useState<'test' | 'sync' | null>(null);
+  const [testing, setTesting] = useState(false);
   const [showSteps, setShowSteps] = useState(!s.url);
 
   const save = (patch: Partial<Settings['sheetSync']>) =>
     updateSettings({ today }, { sheetSync: { ...s, ...patch } });
-  const ready = !!s.url && !!s.key;
+  const connected = !!s.url;
 
-  const status = !s.enabled
-    ? 'Off'
-    : !ready
-      ? 'Needs a URL and key'
-      : s.lastError
-        ? s.lastError
-        : !online && s.dirty
-          ? 'Offline. Will sync when connected.'
-          : s.dirty
-            ? 'Changes waiting to sync…'
-            : s.lastSyncedAt
-              ? `Synced ${ago(s.lastSyncedAt)}`
-              : 'Not synced yet';
-  const tone =
-    s.enabled && s.lastError ? styles.bad : s.enabled && ready && !s.dirty ? styles.ok : '';
+  const status = !connected
+    ? 'Not connected yet.'
+    : s.lastError
+      ? s.lastError
+      : s.lastSyncedAt
+        ? `Last export ${exportedAgo(s.lastSyncedAt)}${s.enabled && s.dirty ? ' · changes waiting' : ''}.`
+        : 'Connected. Not exported yet.';
+  const tone = s.lastError ? styles.bad : s.lastSyncedAt && !s.dirty ? styles.ok : '';
 
   async function copy(text: string, what: string) {
     toast.show(
@@ -76,28 +70,19 @@ export function SheetSection() {
   }
 
   async function test() {
-    setBusy('test');
+    setTesting(true);
     try {
-      await testConnection(url ?? s.url);
-      toast.show('Connected to your Sheet.');
+      const { paired } = await testConnection(url ?? s.url);
+      toast.show(
+        paired
+          ? 'Connected. The Sheet is paired.'
+          : 'Connected. The first export pairs this phone.',
+      );
     } catch (e) {
       toast.show(e instanceof Error ? e.message : 'Could not connect.');
     } finally {
-      setBusy(null);
+      setTesting(false);
     }
-  }
-
-  async function syncNow() {
-    setBusy('sync');
-    const outcome = await runSync(db, today, undefined, { force: true });
-    setBusy(null);
-    toast.show(
-      outcome === 'synced'
-        ? 'Sheet updated.'
-        : outcome === 'failed'
-          ? 'Sync failed. See the message below.'
-          : 'Turn the mirror on first.',
-    );
   }
 
   return (
@@ -105,22 +90,42 @@ export function SheetSection() {
       <h2 id="sheet-h" className={styles.header}>
         Google Sheet
       </h2>
+      <div className={styles.groupPadded}>
+        <Button
+          icon={Sheet}
+          fullWidth
+          large
+          disabled={!connected || exporting || !online}
+          onClick={exportNow}
+        >
+          {exporting ? 'Exporting…' : 'Export to Google Sheet'}
+        </Button>
+        <span className={`t-footnote ${tone || 'secondary'}`} aria-live="polite">
+          {online ? status : 'Offline. Export when you are connected.'}
+        </span>
+        {s.sheetUrl && (
+          <Button
+            variant="plain"
+            icon={ExternalLink}
+            onClick={() => window.open(s.sheetUrl, '_blank', 'noopener')}
+          >
+            Open Sheet
+          </Button>
+        )}
+      </div>
+
       <div className={styles.group}>
         <Switch
-          label="Mirror to Google Sheet"
-          hint={<span className={tone}>{status}</span>}
+          label="Also update automatically"
+          hint="Sends changes a few seconds after you make them, when online."
           checked={s.enabled}
-          disabled={!ready && !s.enabled}
+          disabled={!connected}
           onChange={(enabled) =>
-            save({
-              enabled,
-              dirty: enabled ? true : s.dirty,
-              lastError: null,
-              changedAt: new Date().toISOString(),
-            })
+            save({ enabled, dirty: true, lastError: null, changedAt: new Date().toISOString() })
           }
         />
       </div>
+
       <div className={styles.groupPadded}>
         <TextField
           label="Web app URL"
@@ -141,30 +146,6 @@ export function SheetSection() {
               void save({ url: url.trim(), lastError: null });
           }}
         />
-        <div className="field-block">
-          <span className="field-label">Secret key</span>
-          {s.key ? (
-            <span className={styles.mono} style={{ padding: '0 16px' }}>
-              {s.key}
-            </span>
-          ) : (
-            <span className="t-subhead secondary" style={{ padding: '0 16px' }}>
-              No key yet.
-            </span>
-          )}
-          <div className={styles.pair}>
-            <Button
-              variant="gray"
-              icon={KeyRound}
-              onClick={() => save({ key: generateKey(), lastError: null })}
-            >
-              {s.key ? 'New key' : 'Generate key'}
-            </Button>
-            <Button variant="gray" icon={Copy} disabled={!s.key} onClick={() => copy(s.key, 'Key')}>
-              Copy key
-            </Button>
-          </div>
-        </div>
         <TextField
           label="Sheet link"
           optional
@@ -174,34 +155,16 @@ export function SheetSection() {
           autoCapitalize="off"
           autoCorrect="off"
           spellCheck={false}
+          hint="For the Open Sheet shortcut."
           onChange={(e) => setSheetUrl(e.target.value)}
           onBlur={() => {
             if (sheetUrl !== null && sheetUrl.trim() !== s.sheetUrl)
               void save({ sheetUrl: sheetUrl.trim() });
           }}
         />
-        <div className={styles.pair}>
-          <Button variant="secondary" disabled={!!busy || !(url ?? s.url)} onClick={test}>
-            {busy === 'test' ? 'Testing…' : 'Test connection'}
-          </Button>
-          <Button
-            variant="secondary"
-            icon={RefreshCw}
-            disabled={!!busy || !s.enabled || !ready}
-            onClick={syncNow}
-          >
-            {busy === 'sync' ? 'Syncing…' : 'Sync now'}
-          </Button>
-        </div>
-        {s.sheetUrl && (
-          <Button
-            variant="plain"
-            icon={ExternalLink}
-            onClick={() => window.open(s.sheetUrl, '_blank', 'noopener')}
-          >
-            Open Sheet
-          </Button>
-        )}
+        <Button variant="secondary" disabled={testing || !(url ?? s.url)} onClick={test}>
+          {testing ? 'Testing…' : 'Test connection'}
+        </Button>
       </div>
 
       <div className={styles.groupPadded}>
@@ -216,25 +179,18 @@ export function SheetSection() {
         {showSteps && (
           <>
             <ol className={styles.steps}>
+              <li>Open your Google Sheet on a laptop. Choose Extensions → Apps Script.</li>
               <li>
-                Create a blank Google Sheet. For ₹1,20,000-style grouping, set File → Settings →
-                Locale to India.
-              </li>
-              <li>
-                Open Extensions → Apps Script, delete what is there, and paste the script (Copy
-                script below).
-              </li>
-              <li>
-                Tap Generate key, then Copy key, and paste it over PASTE-YOUR-KEY-HERE in the
-                script. Save.
+                Delete what is there and paste the script (Copy script below, or
+                docs/google-sheet/Code.gs). Save.
               </li>
               <li>
                 Deploy → New deployment → Web app. Execute as Me; access Anyone. Deploy and allow
                 access.
               </li>
               <li>
-                Paste the Web app URL (ends in /exec) above, tap Test connection, then turn the
-                mirror on.
+                Paste the Web app URL (ends in /exec) above, then tap Export to Google Sheet. The
+                first export pairs this phone.
               </li>
             </ol>
             <Button variant="gray" icon={Copy} fullWidth onClick={() => copy(script, 'Script')}>
@@ -244,8 +200,8 @@ export function SheetSection() {
         )}
       </div>
       <p className={styles.footer}>
-        One way: the app writes, the Sheet is for reading. Edits made in the Sheet are replaced on
-        the next sync. Your key is stored on this device and in backups.
+        One way: the app writes, the Sheet is for reading. Each export replaces the Collabs,
+        Invoices, Rights and Activity tabs. Only this phone can write to the paired Sheet.
       </p>
     </section>
   );

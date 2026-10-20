@@ -209,11 +209,12 @@ async function call(url: string, init?: RequestInit): Promise<Record<string, unk
   }
 }
 
-export async function testConnection(url: string): Promise<void> {
+export async function testConnection(url: string): Promise<{ paired: boolean }> {
   if (!isAppsScriptUrl(url))
     throw new Error('That is not an Apps Script web app URL (it ends in /exec).');
   const r = await call(url);
   if (r.app !== 'creator-os-sheet') throw new Error('That URL is not the Creator OS script.');
+  return { paired: r.paired === true };
 }
 
 export async function pushPayload(url: string, payload: SheetPayload): Promise<void> {
@@ -230,19 +231,26 @@ export async function pushPayload(url: string, payload: SheetPayload): Promise<v
 export type SyncOutcome = 'synced' | 'skipped' | 'failed';
 
 /**
- * Pushes everything if the mirror is on and behind. `dirty` is only cleared when nothing
- * changed while the push was in flight, so an edit made mid-push is never lost.
+ * Sends everything to the Sheet.
+ * - Automatic (default): only when automatic updates are on and something changed.
+ * - `manual: true` (the Export button): whenever a URL is set; creates the pairing key if needed.
+ * `dirty` is only cleared when nothing changed while the push was in flight, so an edit made
+ * mid-push is never lost.
  */
 export async function runSync(
   db: CreatorDb,
   today: DateStr,
   push: typeof pushPayload = pushPayload,
-  options: { force?: boolean } = {},
+  options: { manual?: boolean } = {},
 ): Promise<SyncOutcome> {
   const { data, settings } = await readAll(db);
-  const s = settings.sheetSync;
-  if (!s.enabled || !s.url || !s.key) return 'skipped';
-  if (!s.dirty && !options.force) return 'skipped';
+  let s = settings.sheetSync;
+  if (!s.url) return 'skipped';
+  if (!options.manual && (!s.enabled || !s.dirty || !s.key)) return 'skipped';
+  if (!s.key) {
+    s = { ...s, key: generateKey() };
+    await patchSync(db, { key: s.key });
+  }
   const stamp = s.changedAt ?? null;
   const payload: SheetPayload = {
     key: s.key,
@@ -254,7 +262,7 @@ export async function runSync(
   try {
     await push(s.url, payload);
   } catch (e) {
-    await patchSync(db, { lastError: e instanceof Error ? e.message : 'Sync failed.' });
+    await patchSync(db, { lastError: e instanceof Error ? e.message : 'Export failed.' });
     return 'failed';
   }
   await db.transaction('rw', db.settings, async () => {
