@@ -35,6 +35,7 @@ npm run lint           # ESLint (typescript-eslint, react-hooks)
 npm test               # Vitest: domain, actions, backup, sync, components
 npx playwright install chromium webkit   # once
 npm run e2e            # Playwright on an iPhone 14 viewport, WebKit and Chromium
+E2E_BASE_URL=https://creator-os.guptasarthak8135.workers.dev npm run e2e   # against the live site
 ```
 
 The E2E suite builds the production app and covers four scenarios:
