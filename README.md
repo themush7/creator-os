@@ -58,24 +58,26 @@ precaches the whole app.
 Any static host works. The URL must never change once you install: IndexedDB data belongs to the exact
 origin (for example `creator-os.pages.dev`), so a new URL starts empty. Move data across with a backup file.
 
-### Cloudflare Pages (recommended: free, commercial use allowed)
+### Cloudflare (recommended: free, commercial use allowed)
 
 1. Push this folder to a **private** GitHub repository.
-2. In Cloudflare: **Workers & Pages → Create → Pages → Connect to Git**, and pick the repository.
-3. Build settings:
-   - Framework preset: **None**
+2. In Cloudflare: **Workers & Pages → Create → Import a repository**, and pick it.
+3. Settings:
    - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Environment variable: `NODE_VERSION` = `22`
+   - Deploy command: `npx wrangler deploy` (the default)
 4. Deploy. Each push to `main` redeploys. The app shows **Update available · Reload** when a new
    version is ready.
 
-`public/_redirects` sends every route to `index.html`. `public/_headers` stops the CDN caching
-`sw.js` and `index.html`, so updates arrive.
+`wrangler.jsonc` tells Cloudflare to serve `dist/` and send unknown paths to `index.html`, so routes
+like `/collabs/…` work on reload. `public/_headers` stops the CDN caching `sw.js` and `index.html`, so
+updates arrive.
+
+The same build also works as a classic **Pages** project (build output directory `dist`). Pages serves
+single-page apps automatically.
 
 ### Other hosts
 
-- **Netlify:** same build command and output directory. `_redirects` and `_headers` work as they are.
+- **Netlify:** same build command, publish directory `dist`. Add `public/_redirects` with `/* /index.html 200`.
 - **Vercel:** framework "Vite". Add a rewrite of `/(.*)` to `/index.html` in `vercel.json`. The Hobby
   plan is for non-commercial use.
 - **GitHub Pages:** free only for public repositories. Serve from the domain root, or set Vite `base`

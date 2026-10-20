@@ -1,0 +1,10 @@
+// Cloudflare Workers static-assets deploy. The build step (npm run build) writes dist/;
+// `npx wrangler deploy` then uploads it. Unknown paths serve index.html so app routes work.
+{
+  "name": "creator-os",
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
