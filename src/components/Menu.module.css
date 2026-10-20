@@ -1,0 +1,62 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+
+.menu {
+  composes: glass from global;
+  position: fixed;
+  z-index: 61;
+  min-width: 230px;
+  padding: 6px;
+  border-radius: 22px;
+  transform-origin: top right;
+  animation: menu-in 200ms var(--ease-out);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu {
+    animation: none;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border-radius: 16px;
+  color: var(--label);
+  font-size: var(--fs-body);
+  text-align: left;
+}
+
+.item:focus-visible {
+  outline: none;
+  background: var(--fill);
+}
+
+.item:active {
+  background: var(--fill);
+}
+
+.destructive {
+  color: var(--red-text);
+}
+
+.divider {
+  height: 0.5px;
+  margin: 4px 10px;
+  background: var(--separator);
+}

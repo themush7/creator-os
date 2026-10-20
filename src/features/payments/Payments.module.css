@@ -1,0 +1,110 @@
+.strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px var(--s-3) 14px;
+  min-width: 0;
+}
+
+.cell + .cell {
+  border-left: 0.5px solid var(--separator);
+}
+
+.cellLabel {
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+}
+
+.cellValue {
+  font-size: var(--fs-headline);
+  font-weight: 700;
+  letter-spacing: var(--tr-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alert {
+  color: var(--red-text);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  width: 100%;
+  padding: 13px var(--s-4);
+  text-align: left;
+  color: var(--label);
+}
+
+.rowTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  flex: none;
+}
+
+.rowLine {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+}
+
+.analytics {
+  display: flex;
+  flex-direction: column;
+}
+
+.monthSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  padding: 6px 6px 6px var(--s-4);
+}
+
+.monthControls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.monthName {
+  min-width: 76px;
+  text-align: center;
+  font-size: var(--fs-subhead);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+  padding: 11px var(--s-4);
+  border-top: 0.5px solid var(--separator);
+}
+
+.metricText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}

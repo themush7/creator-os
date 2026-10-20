@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes } from 'react';
+import { forwardRef, type ButtonHTMLAttributes } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import styles from './IconButton.module.css';
 
@@ -10,17 +10,13 @@ interface Props extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'
   iconSize?: number;
 }
 
-export function IconButton({
-  icon: Icon,
-  label,
-  tone = 'glass',
-  iconSize = 20,
-  className,
-  type = 'button',
-  ...rest
-}: Props) {
+export const IconButton = forwardRef<HTMLButtonElement, Props>(function IconButton(
+  { icon: Icon, label, tone = 'glass', iconSize = 20, className, type = 'button', ...rest },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       type={type}
       aria-label={label}
       className={[styles.iconButton, styles[tone], 'pressable', className]
@@ -31,4 +27,4 @@ export function IconButton({
       <Icon size={iconSize} strokeWidth={2} aria-hidden />
     </button>
   );
-}
+});

@@ -5,7 +5,12 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
-  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+    dedupe: ['react', 'react-dom'],
+  },
+  // Pre-bundle up front so a mid-session re-optimisation never splits React into two copies.
+  optimizeDeps: { include: ['react', 'react-dom', 'react-router-dom', 'dexie', 'dexie-react-hooks', 'lucide-react', 'zod'] },
   plugins: [
     react(),
     VitePWA({

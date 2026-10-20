@@ -66,3 +66,36 @@ Sarthak asked for an Apple look and feel, referencing github.com/emilkowalski/sk
   - No text selection on controls; hover styles gated behind `(hover: hover)`.
   - Inputs at 16px or larger; `overscroll-behavior: none`.
   - `theme-color` set per colour scheme; `interactive-widget=resizes-content`.
+
+## Judgement calls made in phases 2 to 4 (spec was silent or ambiguous)
+
+### Attention feed and statuses
+- **No repeated payment chase:** when a collab already has an overdue or follow-up item, its next action
+  is not listed again *if* that action is about payment (e.g. Kohl's "Follow up on invoice").
+- **Summary count:** "N things need you today." counts the items shown (at most 5), as in the prototype.
+- **Archived collabs:** excluded from the attention feed and from every Collabs filter except Archived.
+  Their invoices and rights still count in money totals and history.
+- **Urgent due date:** highlighted (orange) only when the owner is You and the date is overdue or
+  within a day, as in the prototype.
+
+### Automatic next actions
+- **Brand-owned:** quick actions that hand work to the brand ("Send script for review",
+  "Mark delivered") set the next action due in 3 days, so a stalled reply surfaces on Home.
+- **"Mark approved":** sets "Record invoice" due today.
+- **Payments:** after a payment, the next action points at the earliest still-open invoice
+  ("Balance due …"). When nothing is owed and the stage is Complete, the owner becomes Clear.
+
+### Invoices and payments
+- **Kind:** the first invoice defaults to Content fee; later ones default to Balance.
+- **Number:** editable. Duplicates are rejected, and the counter skips past a typed higher number.
+- **TDS:** the "10% TDS" chip computes 10% of the invoice amount. Applied to a full-balance entry,
+  it reduces the cash figure by the same amount.
+
+### Rights
+- A period past its last day reads "Ended {date}", even when its status is Extension pending.
+
+### Screens and navigation
+- **Settings:** the Home gear opens Settings as a screen (`/settings`), not a sheet.
+- **Spec 4 hero:** the espresso hero is replaced by an iOS large title, per the redesign.
+- **Undo:** offered on every flow (5 s), not only delete and payment.
+- **Router:** a plain `BrowserRouter` (no data-router features are used).

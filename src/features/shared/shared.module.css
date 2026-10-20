@@ -1,0 +1,242 @@
+/* ── Inset grouped list ─────────────────────────────── */
+.list {
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-height: 52px;
+  padding: 11px var(--s-4);
+  color: var(--label);
+  text-align: left;
+  position: relative;
+}
+
+/* Inset separator, starting at the text like iOS cells. */
+.item {
+  position: relative;
+}
+
+.item + .item::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  left: var(--sep-inset, var(--s-4));
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.rowStatic {
+  composes: row;
+}
+
+.withTile {
+  --sep-inset: 58px;
+}
+
+.tile {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: var(--r-tile);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.rowText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rowTitle {
+  font-size: var(--fs-body);
+  letter-spacing: var(--tr-body);
+}
+
+.rowSub {
+  font-size: var(--fs-subhead);
+  color: var(--label-2);
+  letter-spacing: var(--tr-subhead);
+}
+
+.trailing {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  text-align: right;
+}
+
+.chevron {
+  color: var(--label-3);
+  flex: none;
+}
+
+/* ── Section header ─────────────────────────────────── */
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  min-height: 28px;
+  padding: 0 var(--s-1);
+}
+
+.sectionAside {
+  font-size: var(--fs-subhead);
+  color: var(--label-2);
+  letter-spacing: var(--tr-subhead);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Collab card ────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  width: 100%;
+  padding: var(--s-4);
+  text-align: left;
+  color: var(--label);
+  background: var(--surface);
+  border-radius: var(--r-group);
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.cardNames {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.fee {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.feeMissing {
+  font-size: var(--fs-subhead);
+  font-weight: 400;
+  color: var(--label-2);
+}
+
+.stageLine {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  margin-bottom: 6px;
+}
+
+.nextLine {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-subhead);
+  letter-spacing: var(--tr-subhead);
+}
+
+.nextText {
+  flex: 1;
+}
+
+.due {
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  white-space: nowrap;
+}
+
+.dueUrgent {
+  color: var(--orange-text);
+  font-weight: 600;
+}
+
+.cardFoot {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: var(--s-3);
+  border-top: 0.5px solid var(--separator);
+}
+
+/* ── Skeleton ───────────────────────────────────────── */
+.skeleton {
+  background: var(--surface);
+  border-radius: var(--r-group);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--fill), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+}
+
+/* ── Misc ───────────────────────────────────────────── */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.footnote {
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  letter-spacing: var(--tr-footnote);
+}
+
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-5) var(--s-4);
+}

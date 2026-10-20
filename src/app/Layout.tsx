@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Outlet, useLocation, useMatch } from 'react-router-dom';
+import { SheetsProvider, useSheets } from './sheets';
 import { TabBar } from './TabBar';
-import { QuickAddSheet } from './QuickAddSheet';
 import styles from './Layout.module.css';
 
-export function Layout() {
+function Shell() {
   const location = useLocation();
   const isDetail = !!useMatch('/collabs/:id');
-  const [addOpen, setAddOpen] = useState(false);
+  const { openSheet } = useSheets();
 
   // New screen: start at the top.
   useEffect(() => {
@@ -20,8 +20,15 @@ export function Layout() {
       <main className={`${styles.main} ${isDetail ? styles.detail : ''}`}>
         <Outlet />
       </main>
-      {!isDetail && <TabBar onAdd={() => setAddOpen(true)} />}
-      <QuickAddSheet open={addOpen} onClose={() => setAddOpen(false)} />
+      {!isDetail && <TabBar onAdd={() => openSheet({ type: 'add' })} />}
     </div>
+  );
+}
+
+export function Layout() {
+  return (
+    <SheetsProvider>
+      <Shell />
+    </SheetsProvider>
   );
 }

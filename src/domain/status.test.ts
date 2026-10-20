@@ -167,3 +167,13 @@ describe('next-due urgency', () => {
     expect(isNextDueUrgent({ ...base, owner: 'Brand' }, '2026-10-02')).toBe(false);
   });
 });
+
+describe('ended periods', () => {
+  it('a pending extension on a lapsed period still counts as ended', async () => {
+    const { rightsEnded } = await import('./status');
+    const lumen = period({ startOn: '2026-08-20', extensionPending: true });
+    expect(rightsStatus(lumen, '2026-10-02')).toBe('Extension pending');
+    expect(rightsEnded(lumen, '2026-10-02')).toBe(true);
+    expect(rightsEnded(period(), '2026-10-04')).toBe(false);
+  });
+});

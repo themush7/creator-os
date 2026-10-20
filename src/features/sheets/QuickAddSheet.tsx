@@ -1,51 +1,64 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import type { SheetProps } from '@/app/sheets';
+import { useAction } from '@/app/useAction';
 import { Button } from '@/components/Button';
 import { Segmented } from '@/components/Chip';
 import { SelectField, TextField } from '@/components/Field';
 import { Sheet } from '@/components/Sheet';
-import { useToast } from '@/components/Toast';
+import { createCollab } from '@/domain/actions';
 import { STAGES } from '@/domain/stages';
 import { OWNERS, type Owner } from '@/domain/types';
 import { parseRupees } from '@/lib/money';
-import sheet from './sheetForm.module.css';
+import styles from './sheet.module.css';
 
-interface Props {
-  open: boolean;
-  onClose: () => void;
-}
-
-const EMPTY = { brand: '', campaign: '', fee: '', stage: 0, owner: 'You' as Owner };
-
-export function QuickAddSheet({ open, onClose }: Props) {
-  const toast = useToast();
-  const [form, setForm] = useState(EMPTY);
-
-  useEffect(() => {
-    if (open) setForm(EMPTY);
-  }, [open]);
-
+export function QuickAddSheet({ open, onClose, returnFocus }: SheetProps<{ type: 'add' }>) {
+  const run = useAction();
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    brand: '',
+    campaign: '',
+    fee: '',
+    stage: 0,
+    owner: 'You' as Owner,
+  });
+  const [saving, setSaving] = useState(false);
   const valid = form.brand.trim() !== '' && form.campaign.trim() !== '';
 
-  function save() {
-    if (!valid) return;
-    // Wired to domain/actions in phase 4.
-    void parseRupees(form.fee);
-    toast.show('Saved. Add details when you have them.');
-    onClose();
+  async function save() {
+    if (!valid || saving) return;
+    setSaving(true);
+    const c = await run(
+      (ctx) =>
+        createCollab(ctx, {
+          brand: form.brand,
+          campaign: form.campaign,
+          fee: parseRupees(form.fee),
+          stage: form.stage,
+          owner: form.owner,
+        }),
+      { toast: 'Saved. Add details when you have them.' },
+    );
+    setSaving(false);
+    if (c) {
+      onClose();
+      navigate(`/collabs/${c.id}`, { state: { from: 'Collabs' } });
+    }
   }
 
   return (
     <Sheet
       open={open}
       onClose={onClose}
+      returnFocus={returnFocus}
       title="New collaboration"
       subtitle="Five fields. Details can wait."
     >
       <form
-        className={sheet.form}
+        className={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
-          save();
+          void save();
         }}
       >
         <TextField
@@ -53,6 +66,7 @@ export function QuickAddSheet({ open, onClose }: Props) {
           value={form.brand}
           placeholder="e.g. Northline Audio"
           autoCapitalize="words"
+          enterKeyHint="next"
           data-autofocus
           onChange={(e) => setForm({ ...form, brand: e.target.value })}
           required
@@ -61,6 +75,7 @@ export function QuickAddSheet({ open, onClose }: Props) {
           label="Campaign or deliverable"
           value={form.campaign}
           placeholder="e.g. Commute earbuds reel"
+          enterKeyHint="next"
           onChange={(e) => setForm({ ...form, campaign: e.target.value })}
           required
         />
@@ -88,10 +103,10 @@ export function QuickAddSheet({ open, onClose }: Props) {
           value={form.owner}
           onChange={(owner) => setForm({ ...form, owner })}
         />
-        <Button type="submit" fullWidth large disabled={!valid}>
+        <Button type="submit" fullWidth large disabled={!valid || saving}>
           Save collaboration
         </Button>
-        <p className={sheet.fine}>Contacts, dates and rights can be added after saving.</p>
+        <p className={styles.fine}>Contacts, dates and rights can be added after saving.</p>
       </form>
     </Sheet>
   );

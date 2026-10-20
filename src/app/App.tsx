@@ -1,28 +1,37 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { CollabDetail } from '@/features/collab-detail/CollabDetail';
+import { Collabs } from '@/features/collabs/Collabs';
+import { Home } from '@/features/home/Home';
+import { Payments } from '@/features/payments/Payments';
+import { Rights } from '@/features/rights/Rights';
+import { Settings } from '@/features/settings/Settings';
+import { EmptyState } from '@/components/EmptyState';
+import { ScreenHeader } from './Screen';
 import { Layout } from './Layout';
-import { Gallery } from '@/features/dev/Gallery';
-import { Placeholder } from '@/features/dev/Placeholder';
 
-const router = createBrowserRouter([
-  {
-    element: <Layout />,
-    children: [
-      { path: '/', element: <Gallery /> },
-      { path: '/collabs', element: <Placeholder title="Collabs" /> },
-      { path: '/collabs/:id', element: <Placeholder title="Collaboration" /> },
-      { path: '/payments', element: <Placeholder title="Payments" /> },
-      {
-        path: '/rights',
-        element: (
-          <Placeholder title="Rights" subtitle="Ad usage windows run from the go-live date." />
-        ),
-      },
-      { path: '/settings', element: <Placeholder title="Settings" /> },
-      { path: '*', element: <Placeholder title="Not found" /> },
-    ],
-  },
-]);
+function NotFound() {
+  return (
+    <>
+      <ScreenHeader title="Not found" />
+      <EmptyState>This page does not exist.</EmptyState>
+    </>
+  );
+}
 
 export function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/collabs" element={<Collabs />} />
+          <Route path="/collabs/:id" element={<CollabDetail />} />
+          <Route path="/payments" element={<Payments />} />
+          <Route path="/rights" element={<Rights />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }

@@ -6,7 +6,8 @@
   min-height: 36px;
   padding: 0 14px;
   border-radius: var(--r-pill);
-  background: var(--surface);
+  /* White on the grouped background; grey fill on white surfaces such as sheets. */
+  background: var(--chip-bg, var(--surface));
   color: var(--label);
   font-size: var(--fs-subhead);
   font-weight: 600;

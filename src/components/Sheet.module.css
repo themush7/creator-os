@@ -19,6 +19,7 @@
   margin: 0 auto;
   max-width: 620px;
   background: var(--surface-raised);
+  --chip-bg: var(--fill);
   border-radius: var(--r-sheet);
   box-shadow: var(--sheet-shadow);
   outline: none;

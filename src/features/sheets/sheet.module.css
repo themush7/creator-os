@@ -1,0 +1,134 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+
+.fine {
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  text-align: center;
+  letter-spacing: var(--tr-footnote);
+}
+
+.note {
+  font-size: var(--fs-subhead);
+  color: var(--label-2);
+  background: var(--fill);
+  border-radius: var(--r-field);
+  padding: var(--s-3) var(--s-4);
+  letter-spacing: var(--tr-subhead);
+  line-height: 1.4;
+}
+
+.live {
+  font-size: var(--fs-subhead);
+  color: var(--label-2);
+  padding: 0 var(--s-4);
+  letter-spacing: var(--tr-subhead);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--fill);
+  border-radius: var(--r-field);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--s-3);
+  min-width: 0;
+}
+
+.statLabel {
+  font-size: var(--fs-caption1);
+  color: var(--label-2);
+}
+
+.statValue {
+  font-size: var(--fs-headline);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.quickFill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.divider {
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+/* Inset list inside a sheet: on the sheet's surface, rows sit on the fill colour. */
+.list {
+  border-radius: var(--r-group);
+  background: var(--fill);
+  overflow: hidden;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-height: 50px;
+  padding: 0 var(--s-4);
+  color: var(--label);
+  text-align: left;
+  font-size: var(--fs-body);
+}
+
+.action + .action {
+  box-shadow: inset 0 0.5px 0 var(--separator);
+}
+
+.actionIcon {
+  color: var(--tint);
+  display: flex;
+}
+
+.chevron {
+  color: var(--label-3);
+}
+
+.stageNo {
+  width: 22px;
+  font-size: var(--fs-footnote);
+  color: var(--label-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.current {
+  font-weight: 600;
+}
+
+.check {
+  color: var(--tint);
+  display: flex;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--s-3);
+  align-items: end;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}

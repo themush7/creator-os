@@ -22,6 +22,8 @@ interface Props {
   subtitle?: ReactNode;
   /** Full-height sheet, for long text such as concept notes. */
   full?: boolean;
+  /** Element to focus when the sheet closes. Defaults to whatever was focused when it opened. */
+  returnFocus?: HTMLElement | null;
   children: ReactNode;
 }
 
@@ -37,7 +39,7 @@ const HISTORY_MS = 80;
  * Motion is a spring on the sheet's offset: it tracks the finger 1:1, inherits the release
  * velocity, projects flicks, rubber-bands upward, and can be grabbed mid-animation.
  */
-export function Sheet({ open, onClose, title, subtitle, full, children }: Props) {
+export function Sheet({ open, onClose, title, subtitle, full, returnFocus, children }: Props) {
   const [mounted, setMounted] = useState(open);
   const sheetRef = useRef<HTMLDivElement>(null);
   const scrimRef = useRef<HTMLDivElement>(null);
@@ -124,9 +126,10 @@ export function Sheet({ open, onClose, title, subtitle, full, children }: Props)
       root?.removeAttribute('inert');
       root?.removeAttribute('aria-hidden');
       document.body.style.overflow = prevOverflow;
-      const trigger = triggerRef.current;
+      const trigger = returnFocus ?? triggerRef.current;
       if (trigger && document.contains(trigger)) trigger.focus({ preventScroll: true });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted, open]);
 
   function onKeyDown(e: ReactKeyboardEvent<HTMLDivElement>) {

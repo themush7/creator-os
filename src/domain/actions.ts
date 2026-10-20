@@ -343,6 +343,7 @@ export function addNote(ctx: ActionContext, collabId: string, text: string) {
     if (!t) throw new ActionError('Write something first.');
     await log(rec, c.id, ctx.today, t, 'note');
     await saveCollab(rec, c, {});
+    return t;
   });
 }
 

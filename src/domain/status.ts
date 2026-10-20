@@ -100,6 +100,11 @@ export function rightsElapsed(p: RightsPeriod, today: DateStr): number {
   return Math.min(1, Math.max(0, used / p.days));
 }
 
+/** True once the last day has passed, whatever the status (a pending extension can be on an ended period). */
+export function rightsEnded(p: RightsPeriod, today: DateStr): boolean {
+  return diffDays(rightsEndOn(p), today) > 0;
+}
+
 export function rightsStarted(p: RightsPeriod, today: DateStr): boolean {
   return diffDays(p.startOn, today) >= 0;
 }
@@ -108,7 +113,7 @@ export function rightsStarted(p: RightsPeriod, today: DateStr): boolean {
 export function rightsStatus(p: RightsPeriod, today: DateStr): Exclude<RightsStatus, 'Not live'> {
   if (p.supersededBy) return 'Extended';
   if (p.extensionPending) return 'Extension pending';
-  if (diffDays(rightsEndOn(p), today) > 0) return 'Expired';
+  if (rightsEnded(p, today)) return 'Expired';
   if (rightsDaysLeft(p, today) <= EXPIRING_SOON_DAYS) return 'Expiring soon';
   return 'Active';
 }
